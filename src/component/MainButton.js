@@ -5,8 +5,8 @@ function MainButton(props) {
   const { onPress, title } = props;
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text style={styles.title}>{title}</Text>{" "}
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.title}>{title}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -14,14 +14,14 @@ function MainButton(props) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: "20px",
+    paddingBottom: 20,
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 16,
     paddingHorizontal: 32,
-    borderRadius: 20,
+    borderRadius: 5,
     elevation: 3,
     backgroundColor: "#009ca7",
   },

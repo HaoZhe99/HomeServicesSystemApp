@@ -3,8 +3,9 @@ import { View, Text, SafeAreaView, StyleSheet, Image } from "react-native";
 import MainButton from "./component/MainButton";
 import SecondaryButton from "./component/SecondaryButton";
 import logo from "../assets/homeIcon.png";
+import HomePage from "./HomePage.js";
 
-function StartPage(props) {
+function StartPage(props, navigation) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.ImageContainer}>
@@ -15,7 +16,7 @@ function StartPage(props) {
         <Text style={styles.title}>Home Services</Text>
       </View>
       <View style={styles.button}>
-        <MainButton title="Sign In" bgc="#0cdfd9" />
+        <MainButton title="Sign In" />
         <SecondaryButton title="Sign Up" />
       </View>
     </SafeAreaView>
@@ -32,18 +33,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   TitleContainer: {
-    paddingBottom: "50px",
+    paddingBottom: 30,
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   ImageContainer: {
-    paddingBottom: "50px",
+    paddingBottom: 50,
   },
   button: {
     width: "80%",
   },
   title: {
-    fontFamily: "",
-    paddingBottom: "20px",
-    fontSize: 36,
+    paddingVertical: 10,
+    fontSize: 30,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,

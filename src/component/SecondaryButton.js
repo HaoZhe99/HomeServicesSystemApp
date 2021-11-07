@@ -5,7 +5,7 @@ function SecondaryButton(props) {
   const { onPress, title } = props;
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
+      <TouchableOpacity style={styles.button}>
         <Text style={styles.title}>{title}</Text>
       </TouchableOpacity>
     </View>
@@ -14,7 +14,7 @@ function SecondaryButton(props) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: "20px",
+    paddingBottom: 20,
   },
   button: {
     alignItems: "center",

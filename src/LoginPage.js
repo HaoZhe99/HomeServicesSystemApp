@@ -13,16 +13,11 @@ function RegisterPage(props) {
       </View>
 
       <View style={styles.TitleContainer}>
-        <Text style={styles.title}>Sign up into your</Text>
+        <Text style={styles.title}>Sign In into your</Text>
         <Text style={styles.title}>Account</Text>
       </View>
 
-      <View style={styles.TextInputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          keyboardType="default"
-        />
+      <View>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -33,22 +28,17 @@ function RegisterPage(props) {
           placeholder="Password"
           keyboardType="default"
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          keyboardType="default"
-        />
+      </View>
+
+      <View style={styles.FooterContainer}>
+        <Text style={styles.FooterTitle}>
+          Forget Password?
+          <Text style={styles.FooterInnerTitle}> Reset</Text>
+        </Text>
       </View>
 
       <View style={styles.button}>
-        <MainButton title="Sign Up" />
-      </View>
-
-      <View style={styles.TitleContainer}>
-        <Text style={styles.FooterTitle}>
-          Already have an account?
-          <Text style={styles.FooterInnerTitle}> Login</Text>
-        </Text>
+        <MainButton title="Sign In" />
       </View>
     </SafeAreaView>
   );
@@ -70,7 +60,7 @@ const styles = StyleSheet.create({
   TitleContainer: {
     paddingBottom: 30,
   },
-  TextInputContainer: {
+  FooterContainer: {
     paddingBottom: 30,
   },
   ImageContainer: {
@@ -99,7 +89,7 @@ const styles = StyleSheet.create({
     minWidth: "80%",
     letterSpacing: 0.25,
     color: "black",
-    top: -20,
+    top: -100,
   },
   title: {
     minWidth: "80%",
@@ -115,11 +105,6 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: "#737373",
-    borderBottomWidth: StyleSheet.hairlineWidth,
   },
 });
 export default RegisterPage;
