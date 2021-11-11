@@ -5,6 +5,7 @@ import SecondaryButton from "./component/SecondaryButton";
 import logo from "../assets/homeIcon.png";
 import HomePage from "./HomePage.js";
 
+
 function StartPage(props, navigation) {
   return (
     <SafeAreaView style={styles.container}>
