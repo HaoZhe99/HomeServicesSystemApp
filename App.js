@@ -8,6 +8,7 @@ import HomePage from "./src/HomePage";
 import StartPage from "./src/StartPage";
 import RegisterPage from "./src/RegisterPage";
 import LoginPage from "./src/LoginPage";
+import RegisterSuccessfulPage from "./src/RegisterSuccessfulPage";
 
 function DetailsScreen() {
   return (
@@ -82,7 +83,7 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <LoginPage />
+      <RegisterSuccessfulPage />
     </NavigationContainer>
   );
 }
