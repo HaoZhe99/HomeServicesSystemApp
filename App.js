@@ -35,10 +35,14 @@ export default function App() {
 
             if (route.name === "Home") {
               iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Settings") {
+            } else if (route.name === "Proflie") {
               iconName = focused
-                ? "ios-list-circle-sharp"
+                ? "ios-list-circle"
                 : "ios-list-circle-outline";
+            } else if (route.name === "Settings") {
+              iconName = focused ? "ios-settings" : "ios-settings-outline";
+            } else if (route.name === "Order") {
+              iconName = focused ? "ios-receipt" : "ios-receipt-outline";
             }
 
             // You can return any component that you like here!
@@ -50,7 +54,9 @@ export default function App() {
         })}
       >
         <Tab.Screen name="Home" component={HomePage} />
+        <Tab.Screen name="Order" component={RegisterPage} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Proflie" component={StartPage} />
       </Tab.Navigator>
     </NavigationContainer>
   );

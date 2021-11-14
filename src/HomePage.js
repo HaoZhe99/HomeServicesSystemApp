@@ -60,7 +60,7 @@ function HomePage({ navigation }) {
             autoPlay={false}
             onItemChanged={(item) => console.log("item", item)}
             closeIconColor="#fff"
-            caroselImageStyle={{ height: 150 }}
+            caroselImageStyle={{ height: 170 }}
           />
         </View>
 
@@ -119,7 +119,7 @@ function HomePage({ navigation }) {
         </View>
 
         <View style={styles.companyDetailsContainer}>
-          <Image source={logo} style={{ width: 140, height: 140 }} />
+          <Image source={logo} style={{ width: 120, height: 120 }} />
           <View style={styles.companyDetailsText}>
             <Text numberOfLines={8}>Card</Text>
           </View>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     width: "90%",
-    height: 140,
+    height: 120,
     backgroundColor: "#ffffff",
     borderRadius: 5,
     shadowColor: "#000",
