@@ -10,6 +10,7 @@ import StartPage from "./src/StartPage";
 import RegisterPage from "./src/RegisterPage";
 import LoginPage from "./src/LoginPage";
 import RegisterSuccessfulPage from "./src/RegisterSuccessfulPage";
+import NavPage from "./src/Nav/NavPage";
 
 function SettingsScreen({ navigation }) {
   return (
@@ -33,7 +34,7 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "Home") {
+            if (route.name === "Homes") {
               iconName = focused ? "home" : "home-outline";
             } else if (route.name === "Proflie") {
               iconName = focused
@@ -51,9 +52,10 @@ export default function App() {
           tabBarActiveTintColor: "#009ca7",
           tabBarInactiveTintColor: "black",
           headerTitleAlign: "center",
+          headerShown: false,
         })}
       >
-        <Tab.Screen name="Home" component={HomePage} />
+        <Tab.Screen name="Homes" component={NavPage} />
         <Tab.Screen name="Order" component={RegisterPage} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
         <Tab.Screen name="Proflie" component={StartPage} />

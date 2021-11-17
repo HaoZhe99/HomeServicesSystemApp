@@ -8,7 +8,7 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
-import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
+import { Searchbar, Card, Title } from "react-native-paper";
 import logo from "../assets/homeIcon.png";
 import { ImageSlider } from "react-native-image-slider-banner";
 
@@ -65,7 +65,10 @@ function HomePage({ navigation }) {
         </View>
 
         <View style={styles.categoryContainer}>
-          <Card style={styles.category}>
+          <Card
+            style={styles.category}
+            onPress={() => navigation.navigate("MerchantMenuPage")}
+          >
             <Card.Content>
               <View style={styles.ImageContainer}>
                 <Image source={logo} style={{ width: 50, height: 50 }} />
@@ -142,8 +145,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   imageSliderContainer: {
-    paddingTop: 10,
-    paddingBottom: 10,
+    marginTop: 10,
+    marginBottom: 10,
     width: "90%",
     shadowColor: "#000",
     shadowOffset: {
