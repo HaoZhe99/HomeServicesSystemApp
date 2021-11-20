@@ -9,12 +9,13 @@ import {
 } from "react-native";
 import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
+import MainButton from "../component/MainButton";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function MerchantMenuPage(props) {
+function MerchantMenuPage({ navigation }) {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -35,24 +36,93 @@ function MerchantMenuPage(props) {
           <View style={styles.cardContainer}>
             <Card style={styles.cardContent}>
               <Card.Content>
-                <View style={styles.cardDetail}>
-                  <Title>ABC Company</Title>
-                  <Paragraph>House Cleaning</Paragraph>
-                  <View style={styles.cardInner}>
-                    <View style={styles.cardRating}>
-                      <Paragraph>Rating</Paragraph>
-                      <Paragraph>
-                        <AntDesign name="star" size={14} color="black" />
-                        5.0
-                      </Paragraph>
+                <View style={styles.row}>
+                  <View style={styles.cardDetail}>
+                    <Title>ABC Company</Title>
+                    <Paragraph>House Cleaning</Paragraph>
+                    <View style={styles.cardInner}>
+                      <View style={styles.cardRating}>
+                        <Paragraph>Rating</Paragraph>
+                        <Paragraph>
+                          <AntDesign name="star" size={14} color="black" />
+                          5.0
+                        </Paragraph>
+                      </View>
+                      <View style={styles.cardPrice}>
+                        <Paragraph>Price</Paragraph>
+                        <Paragraph>$20/h</Paragraph>
+                      </View>
                     </View>
-                    <View style={styles.cardPrice}>
-                      <Paragraph>Price</Paragraph>
-                      <Paragraph>$20/h</Paragraph>
+                  </View>
+                  <View style={styles.cardButton}>
+                    <View style={styles.button}>
+                      <MainButton
+                        title="Book"
+                        onPress={() => navigation.navigate("OrderFormPage")}
+                      />
                     </View>
                   </View>
                 </View>
-                <View style={styles.cardButton}></View>
+              </Card.Content>
+            </Card>
+          </View>
+          <View style={styles.cardContainer}>
+            <Card style={styles.cardContent}>
+              <Card.Content>
+                <View style={styles.row}>
+                  <View style={styles.cardDetail}>
+                    <Title>ABC Company</Title>
+                    <Paragraph>House Cleaning</Paragraph>
+                    <View style={styles.cardInner}>
+                      <View style={styles.cardRating}>
+                        <Paragraph>Rating</Paragraph>
+                        <Paragraph>
+                          <AntDesign name="star" size={14} color="black" />
+                          5.0
+                        </Paragraph>
+                      </View>
+                      <View style={styles.cardPrice}>
+                        <Paragraph>Price</Paragraph>
+                        <Paragraph>$20/h</Paragraph>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.cardButton}>
+                    <View style={styles.button}>
+                      <MainButton title="Book" />
+                    </View>
+                  </View>
+                </View>
+              </Card.Content>
+            </Card>
+          </View>
+          <View style={styles.cardContainer}>
+            <Card style={styles.cardContent}>
+              <Card.Content>
+                <View style={styles.row}>
+                  <View style={styles.cardDetail}>
+                    <Title>ABC Company</Title>
+                    <Paragraph>House Cleaning</Paragraph>
+                    <View style={styles.cardInner}>
+                      <View style={styles.cardRating}>
+                        <Paragraph>Rating</Paragraph>
+                        <Paragraph>
+                          <AntDesign name="star" size={14} color="black" />
+                          5.0
+                        </Paragraph>
+                      </View>
+                      <View style={styles.cardPrice}>
+                        <Paragraph>Price</Paragraph>
+                        <Paragraph>$20/h</Paragraph>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.cardButton}>
+                    <View style={styles.button}>
+                      <MainButton title="Book" />
+                    </View>
+                  </View>
+                </View>
               </Card.Content>
             </Card>
           </View>
@@ -96,7 +166,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   cardContainer: {
-    width: "100%",
+    width: "90%",
+    paddingBottom: 10,
   },
   cardContent: {
     shadowColor: "#000000",
@@ -108,8 +179,32 @@ const styles = StyleSheet.create({
     shadowRadius: 16.0,
     elevation: 24,
     borderRadius: 10,
-    minWidth: "90%",
-    minHeight: 10,
+  },
+  row: {
+    flexDirection: "row",
+  },
+  cardDetail: {
+    width: "60%",
+    height: 100,
+    borderRightWidth: 1,
+    borderRightColor: "black",
+    // backgroundColor: "black",
+  },
+  cardInner: {
+    flexDirection: "row",
+    minWidth: "100%",
+  },
+  cardRating: {},
+  cardPrice: { left: "100%" },
+  cardButton: {
+    width: "40%",
+    minHeight: 100,
+    // backgroundColor: "red",
+  },
+  button: {
+    bottom: -50,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
 });
 
