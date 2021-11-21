@@ -11,13 +11,13 @@ import {
 import { TextInput } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import MainButton from "../component/MainButton";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function OrderFormPage(props) {
-  const { onPress, title } = props;
+function OrderFormPage({ navigation }) {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -26,7 +26,7 @@ function OrderFormPage(props) {
   }, []);
 
   const [location, setLocation] = React.useState("");
-  //   const [package, setPackage] = React.useState("");
+  const [servicePackage, setPackage] = React.useState("");
   const [time, setTime] = React.useState("");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -64,6 +64,15 @@ function OrderFormPage(props) {
         <View style={styles.menuContainer}>
           <Text style={styles.menuText}>Cleaning Services</Text>
           <View style={styles.formContainer}>
+            <TextInput
+              mode="outlined"
+              label="Package"
+              style={styles.textInput}
+              keyboardType="default"
+              value={servicePackage}
+              activeOutlineColor="#009ca7"
+              onChangeText={(servicePackage) => setPackage(servicePackage)}
+            />
             <View style={styles.dateAndTimeContainer}>
               {show && (
                 <DateTimePicker
@@ -106,21 +115,13 @@ function OrderFormPage(props) {
                 onFocus={showTimepicker}
               />
             </View>
-            {/* <TextInput
-            label="Email"
-            value={package}
-            onChangeText={(package) => setText(package)}
-          />
-          <TextInput
-            label="Email"
-            value={time}
-            onChangeText={(time) => setText(time)}
-          />
-          <TextInput
-            label="Email"
-            value={date}
-            onChangeText={(date) => setText(date)}
-          /> */}
+
+            <View style={styles.button}>
+              <MainButton
+                title="Book"
+                onPress={() => navigation.navigate("OrderSuccefullyPage")}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: "80%",
     height: 45,
-    margin: 10,
+    marginTop: 10,
     borderColor: "yellow",
   },
   dateAndTimeContainer: {
@@ -183,6 +184,10 @@ const styles = StyleSheet.create({
     width: 200,
     marginTop: 20,
     width: "40%",
+  },
+  button: {
+    width: "80%",
+    paddingTop: 20,
   },
 });
 export default OrderFormPage;
