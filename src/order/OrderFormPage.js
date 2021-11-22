@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
-  Button,
+  Picker,
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
@@ -64,15 +64,28 @@ function OrderFormPage({ navigation }) {
         <View style={styles.menuContainer}>
           <Text style={styles.menuText}>Cleaning Services</Text>
           <View style={styles.formContainer}>
-            <TextInput
-              mode="outlined"
-              label="Package"
-              style={styles.textInput}
-              keyboardType="default"
-              value={servicePackage}
-              activeOutlineColor="#009ca7"
-              onChangeText={(servicePackage) => setPackage(servicePackage)}
-            />
+            <Text style={styles.text}>Location</Text>
+            <View style={styles.picker}>
+              <Picker
+                style={styles.pickerInner}
+                selectedValue={location}
+                onValueChange={(itemValue, itemIndex) => setLocation(itemValue)}
+              >
+                <Picker.Item label="Select Location" value="" />
+                <Picker.Item label="JavaScript" value="js" />
+              </Picker>
+            </View>
+            <Text style={styles.text}>Package</Text>
+            <View style={styles.picker}>
+              <Picker
+                style={styles.pickerInner}
+                selectedValue={servicePackage}
+                onValueChange={(itemValue, itemIndex) => setPackage(itemValue)}
+              >
+                <Picker.Item label="Select Package" value="" />
+                <Picker.Item label="Package A" value="js" />
+              </Picker>
+            </View>
             <View style={styles.dateAndTimeContainer}>
               {show && (
                 <DateTimePicker
@@ -118,8 +131,8 @@ function OrderFormPage({ navigation }) {
 
             <View style={styles.button}>
               <MainButton
-                title="Book"
-                onPress={() => navigation.navigate("OrderSuccefullyPage")}
+                title="Booking"
+                onPress={() => navigation.navigate("orderConfirmPage")}
               />
             </View>
           </View>
@@ -157,6 +170,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     padding: 10,
     marginLeft: 30,
+    marginBottom: 10,
     fontSize: 20,
   },
   formContainer: {
@@ -164,26 +178,39 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  textInput: {
+  text: {
     width: "80%",
-    height: 45,
-    marginTop: 10,
-    borderColor: "yellow",
+    paddingBottom: 5,
+    fontSize: 12,
+    color: "#009ca7",
   },
   dateAndTimeContainer: {
     flexDirection: "row",
   },
   dateInput: {
     width: 200,
-    marginTop: 20,
     width: "40%",
     paddingRight: 5,
+    paddingBottom: 5,
   },
   timeInput: {
-    paddingLeft: 5,
     width: 200,
-    marginTop: 20,
     width: "40%",
+    paddingLeft: 5,
+    paddingBottom: 5,
+  },
+  picker: {
+    width: "80%",
+    height: 45,
+    borderColor: "#a6a6a6",
+    borderRadius: 5,
+    borderWidth: 1.5,
+    backgroundColor: "#f6f6f6",
+    marginBottom: 20,
+  },
+  pickerInner: {
+    top: -5,
+    left: 5,
   },
   button: {
     width: "80%",
