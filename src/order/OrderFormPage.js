@@ -6,12 +6,12 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
-  Picker,
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import MainButton from "../component/MainButton";
+import { Picker } from "@react-native-picker/picker";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));

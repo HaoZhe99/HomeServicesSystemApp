@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,9 +8,10 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
-import { Searchbar, Card, Title } from "react-native-paper";
+import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
 import logo from "../assets/homeIcon.png";
 import { ImageSlider } from "react-native-image-slider-banner";
+import axios from "axios";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -20,12 +21,45 @@ function HomePage({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const onChangeSearch = (query) => setSearchQuery(query);
 
+  // fresh page function
   const [refreshing, setRefreshing] = React.useState(false);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
+  // category get request
+  const [categorys, setCategory] = React.useState([]);
+  useEffect(() => {
+    const getCategory = async () => {
+      const categoryFromServer = await fetchCategory();
+      setCategory(categoryFromServer);
+    };
+    getCategory();
+  }, []);
+
+  const fetchCategory = async () => {
+    const res = await fetch("http://10.0.2.2:8000/api/v1/categories");
+    const data = await res.json();
+    return data.data;
+  };
+
+  // category random get request
+  const [categoryRandom, setCategoryRandom] = React.useState("");
+  useEffect(() => {
+    const getCategoryRandom = async () => {
+      const categoryFromServer = await fetchCategoryRandom();
+      setCategoryRandom(categoryFromServer);
+    };
+    getCategoryRandom();
+  }, []);
+
+  const fetchCategoryRandom = async () => {
+    const res = await fetch("http://10.0.2.2:8000/api/v1/merchants/randomShow");
+    const data = await res.json();
+    console.log(data.data);
+    return data.data;
+  };
 
   return (
     <SafeAreaView>
@@ -65,66 +99,35 @@ function HomePage({ navigation }) {
         </View>
 
         <View style={styles.categoryContainer}>
-          <Card
-            style={styles.category}
-            onPress={() => navigation.navigate("MerchantMenuPage")}
-          >
-            <Card.Content>
-              <View style={styles.ImageContainer}>
-                <Image source={logo} style={{ width: 50, height: 50 }} />
-              </View>
-              <Title>Card title</Title>
-            </Card.Content>
-          </Card>
-          <Card style={styles.category}>
-            <Card.Content>
-              <View style={styles.ImageContainer}>
-                <Image source={logo} style={{ width: 50, height: 50 }} />
-              </View>
-              <Title>Card title</Title>
-            </Card.Content>
-          </Card>
-          <Card style={styles.category}>
-            <Card.Content>
-              <View style={styles.ImageContainer}>
-                <Image source={logo} style={{ width: 50, height: 50 }} />
-              </View>
-              <Title>Card title</Title>
-            </Card.Content>
-          </Card>
-        </View>
-
-        <View style={styles.categoryContainer}>
-          <Card style={styles.category}>
-            <Card.Content>
-              <View style={styles.ImageContainer}>
-                <Image source={logo} style={{ width: 50, height: 50 }} />
-              </View>
-              <Title>Card title</Title>
-            </Card.Content>
-          </Card>
-          <Card style={styles.category}>
-            <Card.Content>
-              <View style={styles.ImageContainer}>
-                <Image source={logo} style={{ width: 50, height: 50 }} />
-              </View>
-              <Title>Card title</Title>
-            </Card.Content>
-          </Card>
-          <Card style={styles.category}>
-            <Card.Content>
-              <View style={styles.ImageContainer}>
-                <Image source={logo} style={{ width: 50, height: 50 }} />
-              </View>
-              <Title>Card title</Title>
-            </Card.Content>
-          </Card>
+          <>
+            {categorys.map((category, i) => {
+              return (
+                <Card
+                  key={i}
+                  style={styles.category}
+                  onPress={() => navigation.navigate("MerchantMenuPage")}
+                >
+                  <Card.Content>
+                    <View style={styles.ImageContainer}>
+                      <Image source={logo} style={{ width: 50, height: 50 }} />
+                    </View>
+                    <Title key="{index}" style={styles.cardText}>
+                      {category.name}
+                    </Title>
+                  </Card.Content>
+                </Card>
+              );
+            })}
+          </>
         </View>
 
         <View style={styles.companyDetailsContainer}>
           <Image source={logo} style={{ width: 120, height: 120 }} />
           <View style={styles.companyDetailsText}>
-            <Text numberOfLines={8}>Card</Text>
+            <Paragraph style={styles.paragraph}>Service Description</Paragraph>
+            <Text style={styles.paragraphDetail} numberOfLines={8}>
+              {categoryRandom.description}
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -138,6 +141,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#F0F0F0",
+  },
+  paragraph: {
+    alignSelf: "flex-start",
+    color: "#009ca7",
+    fontFamily: "notoserif",
+    fontSize: 14,
+  },
+  paragraphDetail: {
+    height: 80,
+    color: "black",
   },
   searchContainer: {
     backgroundColor: "#F0F0F0",
@@ -163,6 +176,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   categoryContainer: {
+    flexWrap: "wrap",
     letterSpacing: 10,
     paddingLeft: 0,
     flexDirection: "row",
@@ -188,8 +202,11 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   companyDetailsText: {
-    margin: 10,
+    margin: 15,
     maxWidth: 190,
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   category: {
     margin: "1%",
@@ -222,6 +239,10 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginVertical: 8,
+  },
+  cardText: {
+    fontSize: 13,
+    textAlign: "center",
   },
 });
 
