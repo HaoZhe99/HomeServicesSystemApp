@@ -88,7 +88,8 @@ function MerchantMenuPage({ navigation, route }) {
                             title="Book"
                             onPress={() =>
                               navigation.navigate("OrderFormPage", {
-                                paramKey: merchant.id,
+                                merchant_id: merchant.id,
+                                merchant_name: merchant.name,
                               })
                             }
                           />

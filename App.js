@@ -11,6 +11,7 @@ import RegisterPage from "./src/RegisterPage";
 import LoginPage from "./src/LoginPage";
 import RegisterSuccessfulPage from "./src/RegisterSuccessfulPage";
 import NavPage from "./src/Nav/NavPage";
+import OrderNav from "./src/Nav/OrderNav";
 
 function SettingsScreen({ navigation }) {
   return (
@@ -56,7 +57,7 @@ export default function App() {
         })}
       >
         <Tab.Screen name="Homes" component={NavPage} />
-        <Tab.Screen name="Order" component={RegisterPage} />
+        <Tab.Screen name="Order" component={OrderNav} />
         <Tab.Screen name="Settings" component={RegisterSuccessfulPage} />
         <Tab.Screen name="Proflie" component={StartPage} />
       </Tab.Navigator>

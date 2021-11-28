@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import MainButton from "../component/MainButton";
 import OrderSuccefullyPage from "./OrderSuccefullyPage";
+import axios from "axios";
 
 function orderConfirmPage({ navigation, route }) {
   const wait = (timeout) => {
@@ -27,12 +28,30 @@ function orderConfirmPage({ navigation, route }) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const orderDone = () => {
-    navigation.navigate("OrderSuccefullyPage", {
-      hearder: "false",
-    });
-    // navigation.dispatch(StackActions.popToTop());
+  const data = {
+    date: route.params.date,
+    time: route.params.time,
+    merchant_id: route.params.merchant_id,
+    package_id: route.params.package,
   };
+
+  const orderDone = () => {
+    try {
+      axios
+        .post("http://10.0.2.2:8000/api/v1/orders", data)
+        .then(function (response) {
+          // handle success
+          console.log(JSON.stringify(response.data));
+        });
+      navigation.navigate("OrderSuccefullyPage", {
+        hearder: "false",
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  // console.log(route.params);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,15 +71,19 @@ function orderConfirmPage({ navigation, route }) {
                   <View style={styles.cardInner}>
                     <View style={styles.textInner}>
                       <Entypo name="shop" size={16} color="black" />
-                      <Text style={styles.text}>ABC Company</Text>
+                      <Text style={styles.text}>
+                        {route.params.merchant_name}
+                      </Text>
                     </View>
                     <View style={styles.textInner}>
                       <Ionicons name="location" size={16} color="black" />
-                      <Text style={styles.text}>Address</Text>
+                      <Text style={styles.text}>{route.params.location}</Text>
                     </View>
                     <View style={styles.textInner}>
                       <Feather name="clock" size={16} color="black" />
-                      <Text style={styles.text}>date at time</Text>
+                      <Text style={styles.text}>
+                        {route.params.date} at {route.params.time}
+                      </Text>
                     </View>
                     <View style={styles.textInner}>
                       <MaterialIcons

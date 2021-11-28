@@ -27,17 +27,24 @@ function OrderFormPage({ navigation, route }) {
 
   const [location, setLocation] = React.useState("");
   const [servicePackage, setPackage] = React.useState("");
-  const [time, setTime] = React.useState("");
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
+  const [mode, setMode] = useState("");
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
-    console.log(date.getFullYear());
   };
+
+  const d =
+    date.getFullYear().toString() +
+    "-" +
+    (date.getMonth() + 1).toString() +
+    "-" +
+    date.getDate().toString();
+
+  const t = date.getHours().toString() + ":" + date.getMinutes().toString();
 
   const showMode = (currentMode) => {
     setShow(true);
@@ -45,7 +52,6 @@ function OrderFormPage({ navigation, route }) {
   };
 
   const showDatepicker = () => {
-    console.log("hi");
     showMode("date");
   };
 
@@ -54,8 +60,14 @@ function OrderFormPage({ navigation, route }) {
   };
 
   const booking = () => {
-    // navigation.navigate("orderConfirmPage");
-    console.log(date);
+    navigation.navigate("orderConfirmPage", {
+      date: d,
+      time: t,
+      location: location,
+      package: servicePackage,
+      merchant_id: route.params.merchant_id,
+      merchant_name: route.params.merchant_name,
+    });
   };
 
   return (
@@ -88,7 +100,7 @@ function OrderFormPage({ navigation, route }) {
                 onValueChange={(itemValue, itemIndex) => setPackage(itemValue)}
               >
                 <Picker.Item label="Select Package" value="" />
-                <Picker.Item label="Package A" value="Package A" />
+                <Picker.Item label="Package A" value={1} />
               </Picker>
             </View>
             <View style={styles.dateAndTimeContainer}>
@@ -129,7 +141,7 @@ function OrderFormPage({ navigation, route }) {
                 style={styles.timeInput}
                 activeOutlineColor="#009ca7"
                 right={<TextInput.Icon name="clock" />}
-                onChangeText={(time) => setTime(time)}
+                onChangeText={(date) => setDate(date)}
                 onFocus={showTimepicker}
               />
             </View>
