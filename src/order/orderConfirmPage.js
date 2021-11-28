@@ -13,18 +13,26 @@ import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import MainButton from "../component/MainButton";
+import OrderSuccefullyPage from "./OrderSuccefullyPage";
 
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
+function orderConfirmPage({ navigation, route }) {
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
 
-function orderConfirmPage({ navigation }) {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
+  const orderDone = () => {
+    navigation.navigate("OrderSuccefullyPage", {
+      hearder: "false",
+    });
+    // navigation.dispatch(StackActions.popToTop());
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,7 +77,7 @@ function orderConfirmPage({ navigation }) {
           </View>
 
           <View style={styles.button}>
-            <MainButton title="Booking" />
+            <MainButton title="Booking" onPress={() => orderDone()} />
           </View>
         </View>
       </ScrollView>

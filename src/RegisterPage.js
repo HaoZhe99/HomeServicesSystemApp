@@ -14,11 +14,8 @@ import RegisterSuccessfulPage from "./RegisterSuccessfulPage";
 
 function RegisterPage(props) {
   const [username, setUsernameText] = React.useState("");
-
   const [email, setEmailText] = React.useState("");
-
   const [password, setPasswordText] = React.useState("");
-
   const [confirmPassword, setConfirmPasswordText] = React.useState("");
 
   const data = {

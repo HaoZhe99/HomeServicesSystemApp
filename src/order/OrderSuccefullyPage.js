@@ -1,21 +1,34 @@
 import React from "react";
-import { SafeAreaView, View, Text, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { StackActions } from "@react-navigation/native";
 
-function OrderSuccefullyPage(props) {
+function OrderSuccefullyPage({ navigation }) {
+  const goHonePage = () => {
+    navigation.dispatch(StackActions.popToTop());
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.ImageContainer}>
-        <AntDesign name="checkcircleo" size={68} color="green" />
-      </View>
-      <View style={styles.TitleContainer}>
-        <Text style={styles.title}>Order</Text>
-        <Text style={styles.title}>Successfully</Text>
-      </View>
+      <TouchableOpacity style={styles.c} onPress={() => goHonePage()}>
+        <View style={styles.ImageContainer}>
+          <AntDesign name="checkcircleo" size={68} color="green" />
+        </View>
+        <View style={styles.TitleContainer}>
+          <Text style={styles.title}>Order</Text>
+          <Text style={styles.title}>Successfully</Text>
+        </View>
 
-      <View style={styles.FooterContainer}>
-        <Text style={styles.FooterTitle}>Tap to Continues</Text>
-      </View>
+        <View style={styles.FooterContainer}>
+          <Text style={styles.FooterTitle}>Tap to Continues</Text>
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -29,6 +42,11 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#009ca7",
   },
+  c: {
+    width: "100%",
+    height: 700,
+    paddingTop: 200,
+  },
   TitleContainer: {
     paddingBottom: 30,
     textAlign: "center",
@@ -37,6 +55,9 @@ const styles = StyleSheet.create({
   },
   ImageContainer: {
     paddingBottom: 50,
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     paddingVertical: 10,

@@ -11,7 +11,6 @@ import {
 import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
 import logo from "../assets/homeIcon.png";
 import { ImageSlider } from "react-native-image-slider-banner";
-import axios from "axios";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -105,13 +104,21 @@ function HomePage({ navigation }) {
                 <Card
                   key={i}
                   style={styles.category}
-                  onPress={() => navigation.navigate("MerchantMenuPage")}
+                  onPress={() =>
+                    navigation.navigate("MerchantMenuPage", {
+                      paramKey: category.id,
+                    })
+                  }
                 >
                   <Card.Content>
                     <View style={styles.ImageContainer}>
                       <Image source={logo} style={{ width: 50, height: 50 }} />
                     </View>
-                    <Title key="{index}" style={styles.cardText}>
+                    <Title
+                      key="{index}"
+                      style={styles.cardText}
+                      value={category.id}
+                    >
                       {category.name}
                     </Title>
                   </Card.Content>
@@ -124,8 +131,10 @@ function HomePage({ navigation }) {
         <View style={styles.companyDetailsContainer}>
           <Image source={logo} style={{ width: 120, height: 120 }} />
           <View style={styles.companyDetailsText}>
-            <Paragraph style={styles.paragraph}>Service Description</Paragraph>
-            <Text style={styles.paragraphDetail} numberOfLines={8}>
+            <Paragraph style={styles.paragraph} numberOfLines={1}>
+              {categoryRandom.name}
+            </Paragraph>
+            <Text style={styles.paragraphDetail} numberOfLines={4}>
               {categoryRandom.description}
             </Text>
           </View>
@@ -147,6 +156,7 @@ const styles = StyleSheet.create({
     color: "#009ca7",
     fontFamily: "notoserif",
     fontSize: 14,
+    fontWeight: "bold",
   },
   paragraphDetail: {
     height: 80,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,13 +15,32 @@ const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function MerchantMenuPage({ navigation }) {
+function MerchantMenuPage({ navigation, route }) {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
+  // category get request
+  const [merchants, setMerchant] = React.useState([]);
+  useEffect(() => {
+    const getMerchant = async () => {
+      const merchantFromServer = await fetchMerchant();
+      setMerchant(merchantFromServer);
+    };
+    getMerchant();
+  }, []);
+
+  const fetchMerchant = async () => {
+    const res = await fetch(
+      "http://10.0.2.2:8000/api/v1/merchants/merchantWithCategory/" +
+        route.params.paramKey
+    );
+    const data = await res.json();
+    return data.data;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,99 +52,54 @@ function MerchantMenuPage({ navigation }) {
       >
         <View style={styles.menuContainer}>
           <Text style={styles.menuText}>Services</Text>
-          <View style={styles.cardContainer}>
-            <Card style={styles.cardContent}>
-              <Card.Content>
-                <View style={styles.row}>
-                  <View style={styles.cardDetail}>
-                    <Title>ABC Company</Title>
-                    <Paragraph>House Cleaning</Paragraph>
-                    <View style={styles.cardInner}>
-                      <View style={styles.cardRating}>
-                        <Paragraph>Rating</Paragraph>
-                        <Paragraph>
-                          <AntDesign name="star" size={14} color="black" />
-                          5.0
+          {merchants.map((merchant, i) => {
+            return (
+              <View style={styles.cardContainer} key={i}>
+                <Card style={styles.cardContent}>
+                  <Card.Content>
+                    <View style={styles.row}>
+                      <View style={styles.cardDetail}>
+                        <Paragraph numberOfLines={1}>{merchant.name}</Paragraph>
+                        <Paragraph style={styles.cardTitlle}>
+                          {merchant.categories[0].name}
                         </Paragraph>
+                        <View style={styles.cardInner}>
+                          <View style={styles.cardRating}>
+                            <Paragraph>Rating</Paragraph>
+                            <Paragraph>
+                              <AntDesign
+                                name="star"
+                                size={14}
+                                color="black"
+                                marginRight={10}
+                              />
+                              5.0
+                            </Paragraph>
+                          </View>
+                          <View style={styles.cardPrice}>
+                            <Paragraph>Price</Paragraph>
+                            <Paragraph>$20/h</Paragraph>
+                          </View>
+                        </View>
                       </View>
-                      <View style={styles.cardPrice}>
-                        <Paragraph>Price</Paragraph>
-                        <Paragraph>$20/h</Paragraph>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={styles.cardButton}>
-                    <View style={styles.button}>
-                      <MainButton
-                        title="Book"
-                        onPress={() => navigation.navigate("OrderFormPage")}
-                      />
-                    </View>
-                  </View>
-                </View>
-              </Card.Content>
-            </Card>
-          </View>
-          <View style={styles.cardContainer}>
-            <Card style={styles.cardContent}>
-              <Card.Content>
-                <View style={styles.row}>
-                  <View style={styles.cardDetail}>
-                    <Title>ABC Company</Title>
-                    <Paragraph>House Cleaning</Paragraph>
-                    <View style={styles.cardInner}>
-                      <View style={styles.cardRating}>
-                        <Paragraph>Rating</Paragraph>
-                        <Paragraph>
-                          <AntDesign name="star" size={14} color="black" />
-                          5.0
-                        </Paragraph>
-                      </View>
-                      <View style={styles.cardPrice}>
-                        <Paragraph>Price</Paragraph>
-                        <Paragraph>$20/h</Paragraph>
+                      <View style={styles.cardButton}>
+                        <View style={styles.button}>
+                          <MainButton
+                            title="Book"
+                            onPress={() =>
+                              navigation.navigate("OrderFormPage", {
+                                paramKey: merchant.id,
+                              })
+                            }
+                          />
+                        </View>
                       </View>
                     </View>
-                  </View>
-                  <View style={styles.cardButton}>
-                    <View style={styles.button}>
-                      <MainButton title="Book" />
-                    </View>
-                  </View>
-                </View>
-              </Card.Content>
-            </Card>
-          </View>
-          <View style={styles.cardContainer}>
-            <Card style={styles.cardContent}>
-              <Card.Content>
-                <View style={styles.row}>
-                  <View style={styles.cardDetail}>
-                    <Title>ABC Company</Title>
-                    <Paragraph>House Cleaning</Paragraph>
-                    <View style={styles.cardInner}>
-                      <View style={styles.cardRating}>
-                        <Paragraph>Rating</Paragraph>
-                        <Paragraph>
-                          <AntDesign name="star" size={14} color="black" />
-                          5.0
-                        </Paragraph>
-                      </View>
-                      <View style={styles.cardPrice}>
-                        <Paragraph>Price</Paragraph>
-                        <Paragraph>$20/h</Paragraph>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={styles.cardButton}>
-                    <View style={styles.button}>
-                      <MainButton title="Book" />
-                    </View>
-                  </View>
-                </View>
-              </Card.Content>
-            </Card>
-          </View>
+                  </Card.Content>
+                </Card>
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -169,6 +143,10 @@ const styles = StyleSheet.create({
     width: "90%",
     paddingBottom: 10,
   },
+  cardTitlle: {
+    color: "#009ca7",
+    fontSize: 14,
+  },
   cardContent: {
     shadowColor: "#000000",
     shadowOffset: {
@@ -188,7 +166,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRightWidth: 1,
     borderRightColor: "black",
-    // backgroundColor: "black",
+    // marginRight: 10,
   },
   cardInner: {
     flexDirection: "row",

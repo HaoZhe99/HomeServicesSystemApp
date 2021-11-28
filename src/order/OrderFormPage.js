@@ -17,7 +17,7 @@ const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function OrderFormPage({ navigation }) {
+function OrderFormPage({ navigation, route }) {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -53,6 +53,11 @@ function OrderFormPage({ navigation }) {
     showMode("time");
   };
 
+  const booking = () => {
+    // navigation.navigate("orderConfirmPage");
+    console.log(date);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -83,7 +88,7 @@ function OrderFormPage({ navigation }) {
                 onValueChange={(itemValue, itemIndex) => setPackage(itemValue)}
               >
                 <Picker.Item label="Select Package" value="" />
-                <Picker.Item label="Package A" value="js" />
+                <Picker.Item label="Package A" value="Package A" />
               </Picker>
             </View>
             <View style={styles.dateAndTimeContainer}>
@@ -124,16 +129,13 @@ function OrderFormPage({ navigation }) {
                 style={styles.timeInput}
                 activeOutlineColor="#009ca7"
                 right={<TextInput.Icon name="clock" />}
-                onChangeText={(date) => setDate(date)}
+                onChangeText={(time) => setTime(time)}
                 onFocus={showTimepicker}
               />
             </View>
 
             <View style={styles.button}>
-              <MainButton
-                title="Booking"
-                onPress={() => navigation.navigate("orderConfirmPage")}
-              />
+              <MainButton title="Booking" onPress={() => booking()} />
             </View>
           </View>
         </View>

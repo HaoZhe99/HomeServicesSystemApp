@@ -30,7 +30,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        screenOptions={({ route }) => ({
+        screenOptions={({ route, porps }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -57,7 +57,7 @@ export default function App() {
       >
         <Tab.Screen name="Homes" component={NavPage} />
         <Tab.Screen name="Order" component={RegisterPage} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Settings" component={RegisterSuccessfulPage} />
         <Tab.Screen name="Proflie" component={StartPage} />
       </Tab.Navigator>
     </NavigationContainer>
