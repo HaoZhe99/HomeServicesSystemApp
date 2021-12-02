@@ -12,6 +12,8 @@ import LoginPage from "./src/LoginPage";
 import RegisterSuccessfulPage from "./src/RegisterSuccessfulPage";
 import NavPage from "./src/Nav/NavPage";
 import OrderNav from "./src/Nav/OrderNav";
+import ServicerNewOrderPage from "./src/Servicer/ServicerNewOrderPage";
+import ServicerCompletedOrderPage from "./src/Servicer/ServicerCompletedOrderPage";
 
 function SettingsScreen({ navigation }) {
   return (
@@ -58,8 +60,20 @@ export default function App() {
       >
         <Tab.Screen name="Homes" component={NavPage} />
         <Tab.Screen name="Order" component={OrderNav} />
-        <Tab.Screen name="Settings" component={RegisterSuccessfulPage} />
-        <Tab.Screen name="Proflie" component={StartPage} />
+        <Tab.Screen
+          name="Settings"
+          component={ServicerCompletedOrderPage}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Tab.Screen
+          name="Proflie"
+          component={ServicerNewOrderPage}
+          options={{
+            headerShown: true,
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

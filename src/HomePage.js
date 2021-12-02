@@ -35,7 +35,7 @@ function HomePage({ navigation }) {
       setCategory(categoryFromServer);
     };
     getCategory();
-  }, []);
+  }, [refreshing]);
 
   const fetchCategory = async () => {
     const res = await fetch("http://10.0.2.2:8000/api/v1/categories");
@@ -51,7 +51,7 @@ function HomePage({ navigation }) {
       setCategoryRandom(categoryFromServer);
     };
     getCategoryRandom();
-  }, []);
+  }, [refreshing]);
 
   const fetchCategoryRandom = async () => {
     const res = await fetch("http://10.0.2.2:8000/api/v1/merchants/randomShow");
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     maxWidth: 190,
     textAlign: "center",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   category: {
     margin: "1%",
