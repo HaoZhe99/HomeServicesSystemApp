@@ -12,6 +12,8 @@ import LoginPage from "./src/LoginPage";
 import RegisterSuccessfulPage from "./src/RegisterSuccessfulPage";
 import NavPage from "./src/Nav/NavPage";
 import OrderNav from "./src/Nav/OrderNav";
+import ServicerNewOrderNav from "./src/Nav/ServicerNewOrderNav";
+import ServicerOldOrderNav from "./src/Nav/ServicerOldOrderNav";
 import ServicerNewOrderPage from "./src/Servicer/ServicerNewOrderPage";
 import ServicerCompletedOrderPage from "./src/Servicer/ServicerCompletedOrderPage";
 
@@ -60,20 +62,8 @@ export default function App() {
       >
         <Tab.Screen name="Homes" component={NavPage} />
         <Tab.Screen name="Order" component={OrderNav} />
-        <Tab.Screen
-          name="Settings"
-          component={ServicerCompletedOrderPage}
-          options={{
-            headerShown: true,
-          }}
-        />
-        <Tab.Screen
-          name="Proflie"
-          component={ServicerNewOrderPage}
-          options={{
-            headerShown: true,
-          }}
-        />
+        <Tab.Screen name="Settings" component={ServicerOldOrderNav} />
+        <Tab.Screen name="Proflie" component={ServicerNewOrderNav} />
       </Tab.Navigator>
     </NavigationContainer>
   );

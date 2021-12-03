@@ -22,7 +22,7 @@ const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function ServicerNewOrderPage(props) {
+function ServicerNewOrderPage({ navigation, route }) {
   // fresh page function
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -45,11 +45,21 @@ function ServicerNewOrderPage(props) {
   const fetchOrder = async () => {
     const res = await fetch("http://10.0.2.2:8000/api/v1/orders/newOrder/1");
     const data = await res.json();
-    console.log(data.data[0]);
+    // console.log(data.data[0]);
     return data.data;
   };
 
-  console.log(orders);
+  // const viewOrder = () => {
+  //   // navigation.navigate("ServicerOrderDetailPage", {
+  //   //   // id: order_id,
+  //   //   // time: t,
+  //   //   // location: location,
+  //   //   // package: servicePackage,
+  //   //   // merchant_id: route.params.merchant_id,
+  //   //   // merchant_name: route.params.merchant_name,
+  //   // });
+  // };
+  // console.log(orders);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -64,9 +74,17 @@ function ServicerNewOrderPage(props) {
           </View>
         ) : (
           orders.map((order, i) => {
+            const order_id = order.id;
             return (
               <View style={styles.cardContainer} key={i}>
-                <Card style={styles.cardContent}>
+                <Card
+                  style={styles.cardContent}
+                  onPress={() =>
+                    navigation.navigate("ServicerOrderDetailPage", {
+                      order_id: order.id,
+                    })
+                  }
+                >
                   <Card.Content>
                     <View style={styles.row}>
                       {/* <View style={styles.merchantImage}>

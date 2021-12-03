@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,15 +7,14 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
-import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
+import { Card, Paragraph } from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import MainButton from "../component/MainButton";
 import axios from "axios";
 
-function orderConfirmPage({ navigation, route }) {
+function ServicerOrderDetailPage({ navigation, route }) {
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -27,31 +26,25 @@ function orderConfirmPage({ navigation, route }) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const data = {
-    date: route.params.date,
-    time: route.params.time,
-    merchant_id: route.params.merchant_id,
-    package_id: route.params.package,
+  //get orders
+  const [orders, setOrder] = React.useState("");
+  useEffect(() => {
+    const getOrder = async () => {
+      const orderFromServer = await fetchOrder();
+      setOrder(orderFromServer);
+    };
+    getOrder();
+  }, [refreshing]);
+
+  const fetchOrder = async () => {
+    const res = await fetch(
+      "http://10.0.2.2:8000/api/v1/orders/" + route.params.order_id
+    );
+    const data = await res.json();
+    return data.data;
   };
 
-  const orderDone = () => {
-    try {
-      axios
-        .post("http://10.0.2.2:8000/api/v1/orders", data)
-        .then(function (response) {
-          // handle success
-          console.log(JSON.stringify(response.data));
-        });
-      navigation.navigate("OrderSuccefullyPage", {
-        hearder: "false",
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  // console.log(route.params);
-
+  console.log(orders.merchant.name);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -61,7 +54,8 @@ function orderConfirmPage({ navigation, route }) {
         }
       >
         <View style={styles.menuContainer}>
-          <Text style={styles.menuText}>Booking Confirmation</Text>
+          <Text style={styles.menuText}>Order Detail</Text>
+
           <View style={styles.cardContainer}>
             <Card style={styles.cardContent}>
               <Card.Content>
@@ -70,18 +64,16 @@ function orderConfirmPage({ navigation, route }) {
                   <View style={styles.cardInner}>
                     <View style={styles.textInner}>
                       <Entypo name="shop" size={16} color="black" />
-                      <Text style={styles.text}>
-                        {route.params.merchant_name}
-                      </Text>
+                      {/* <Text style={styles.text}>{orders.merchant.name}</Text> */}
                     </View>
                     <View style={styles.textInner}>
                       <Ionicons name="location" size={16} color="black" />
-                      <Text style={styles.text}>{route.params.location}</Text>
+                      {/* <Text style={styles.text}>{orders.address}</Text> */}
                     </View>
                     <View style={styles.textInner}>
                       <Feather name="clock" size={16} color="black" />
                       <Text style={styles.text}>
-                        {route.params.date} at {route.params.time}
+                        {/* {orders.date} at {orders.time} */}
                       </Text>
                     </View>
                     <View style={styles.textInner}>
@@ -90,7 +82,15 @@ function orderConfirmPage({ navigation, route }) {
                         size={16}
                         color="black"
                       />
-                      <Text style={styles.text}>Price</Text>
+                      {/* <Text style={styles.text}>{orders.price}</Text> */}
+                    </View>
+                    <View style={styles.textInner}>
+                      <Ionicons
+                        name="person-circle-outline"
+                        size={16}
+                        color="black"
+                      />
+                      {/* <Text style={styles.text}>{orders.user.name}</Text> */}
                     </View>
                   </View>
                 </View>
@@ -98,9 +98,7 @@ function orderConfirmPage({ navigation, route }) {
             </Card>
           </View>
 
-          <View style={styles.button}>
-            <MainButton title="Booking" onPress={() => orderDone()} />
-          </View>
+          <View style={styles.button}></View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -134,8 +132,7 @@ const styles = StyleSheet.create({
     elevation: 24,
   },
   menuText: {
-    alignSelf: "flex-start",
-    paddingLeft: 35,
+    alignSelf: "center",
     paddingTop: 20,
     paddingBottom: 20,
     fontSize: 25,
@@ -188,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default orderConfirmPage;
+export default ServicerOrderDetailPage;
