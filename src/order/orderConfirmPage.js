@@ -32,6 +32,8 @@ function orderConfirmPage({ navigation, route }) {
     time: route.params.time,
     merchant_id: route.params.merchant_id,
     package_id: route.params.package,
+    status: "incomplete",
+    price: "99",
   };
 
   const orderDone = () => {

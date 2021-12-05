@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
+  Alert,
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
@@ -44,7 +45,14 @@ function OrderFormPage({ navigation, route }) {
     "-" +
     date.getDate().toString();
 
-  const t = date.getHours().toString() + ":" + date.getMinutes().toString();
+  const t =
+    (date.getHours().toString() >= 0 && date.getHours().toString() < 10
+      ? "0" + (date.getHours() + 8).toString()
+      : (date.getHours() + 8).toString()) +
+    ":" +
+    (date.getMinutes().toString() >= 0 && date.getMinutes().toString() < 10
+      ? "0" + date.getMinutes().toString()
+      : date.getMinutes().toString());
 
   const showMode = (currentMode) => {
     setShow(true);
@@ -60,14 +68,24 @@ function OrderFormPage({ navigation, route }) {
   };
 
   const booking = () => {
-    navigation.navigate("orderConfirmPage", {
-      date: d,
-      time: t,
-      location: location,
-      package: servicePackage,
-      merchant_id: route.params.merchant_id,
-      merchant_name: route.params.merchant_name,
-    });
+    console.log(date.getHours().toString());
+    if (date.getHours().toString() < 10 || date.getHours().toString() > 18) {
+      Alert.alert("Time Invaild!", "Selected Time not Under Service Time!", [
+        {
+          text: "Cancel",
+        },
+        { text: "Ok" },
+      ]);
+    } else {
+      navigation.navigate("orderConfirmPage", {
+        date: d,
+        time: t,
+        location: location,
+        package: servicePackage,
+        merchant_id: route.params.merchant_id,
+        merchant_name: route.params.merchant_name,
+      });
+    }
   };
 
   return (
@@ -112,6 +130,8 @@ function OrderFormPage({ navigation, route }) {
                   is24Hour={true}
                   display="default"
                   onChange={onChange}
+                  minimumDate={new Date()}
+                  maximumDate={new Date(2031, 12, 31)}
                 />
               )}
               <TextInput
@@ -132,9 +152,15 @@ function OrderFormPage({ navigation, route }) {
               />
               <TextInput
                 value={
-                  date.getHours().toString() +
+                  (date.getHours().toString() >= 0 &&
+                  date.getHours().toString() < 10
+                    ? "0" + (date.getHours() + 8).toString()
+                    : (date.getHours() + 8).toString()) +
                   ":" +
-                  date.getMinutes().toString()
+                  (date.getMinutes().toString() >= 0 &&
+                  date.getMinutes().toString() < 10
+                    ? "0" + date.getMinutes().toString()
+                    : date.getMinutes().toString())
                 }
                 mode="outlined"
                 label="Time"

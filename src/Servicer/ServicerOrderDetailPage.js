@@ -6,12 +6,15 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Card, Paragraph } from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 
 function ServicerOrderDetailPage({ navigation, route }) {
@@ -44,7 +47,39 @@ function ServicerOrderDetailPage({ navigation, route }) {
     return data.data;
   };
 
-  console.log(orders.merchant.name);
+  const data = {
+    status: "completed",
+  };
+
+  const updateOrderStatus = () => {
+    try {
+      axios
+        .post(
+          "http://10.0.2.2:8000/api/v1/orders/updateOrder/" +
+            route.params.order_id,
+          data
+        )
+        .then(function (response) {
+          // handle success
+          console.log(JSON.stringify(response.data));
+        });
+      navigation.navigate("OrderCompletedSuccessfully", {
+        hearder: "false",
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const OrderAlert = () => {
+    Alert.alert("Are You Sure?", "Order Completed", [
+      {
+        text: "Cancel",
+      },
+      { text: "Completed", onPress: () => updateOrderStatus() },
+    ]);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -54,43 +89,76 @@ function ServicerOrderDetailPage({ navigation, route }) {
         }
       >
         <View style={styles.menuContainer}>
-          <Text style={styles.menuText}>Order Detail</Text>
+          <Text style={styles.menuText}>
+            {orders.status == "completed"
+              ? "Completed Order"
+              : "Incomplete Order"}
+          </Text>
 
           <View style={styles.cardContainer}>
             <Card style={styles.cardContent}>
               <Card.Content>
                 <View style={styles.cardDetail}>
-                  <Paragraph style={styles.paragraph}>Order Review</Paragraph>
                   <View style={styles.cardInner}>
                     <View style={styles.textInner}>
-                      <Entypo name="shop" size={16} color="black" />
-                      {/* <Text style={styles.text}>{orders.merchant.name}</Text> */}
-                    </View>
-                    <View style={styles.textInner}>
-                      <Ionicons name="location" size={16} color="black" />
-                      {/* <Text style={styles.text}>{orders.address}</Text> */}
-                    </View>
-                    <View style={styles.textInner}>
-                      <Feather name="clock" size={16} color="black" />
+                      <Entypo name="shop" size={18} color="black" />
                       <Text style={styles.text}>
-                        {/* {orders.date} at {orders.time} */}
+                        {orders.merchant == undefined
+                          ? null
+                          : orders.merchant.name}
+                      </Text>
+                    </View>
+                    <View style={styles.textInner}>
+                      <Ionicons
+                        name="location-outline"
+                        size={18}
+                        color="black"
+                      />
+                      <Text style={styles.text}>{orders.address}</Text>
+                    </View>
+                    <View style={styles.textInner}>
+                      <Ionicons
+                        name="person-circle-outline"
+                        size={18}
+                        color="black"
+                      />
+                      <Text style={styles.text}>
+                        {orders.user == undefined ? null : orders.user.name}
+                      </Text>
+                    </View>
+                    <View style={styles.textInner}>
+                      <Feather name="clock" size={18} color="black" />
+                      <Text style={styles.text}>
+                        {orders.date} at {orders.time}
+                      </Text>
+                    </View>
+                    <View style={styles.textInner}>
+                      <MaterialIcons
+                        name="miscellaneous-services"
+                        size={18}
+                        color="black"
+                      />
+                      <Text style={styles.text}>
+                        {orders.package == undefined
+                          ? null
+                          : orders.package.name}
                       </Text>
                     </View>
                     <View style={styles.textInner}>
                       <MaterialIcons
                         name="attach-money"
-                        size={16}
+                        size={18}
                         color="black"
                       />
-                      {/* <Text style={styles.text}>{orders.price}</Text> */}
+                      <Text style={styles.text}>{orders.price}</Text>
                     </View>
                     <View style={styles.textInner}>
-                      <Ionicons
-                        name="person-circle-outline"
-                        size={16}
-                        color="black"
-                      />
-                      {/* <Text style={styles.text}>{orders.user.name}</Text> */}
+                      <AntDesign name="checkcircleo" size={18} color="black" />
+                      <Text style={styles.text}>
+                        {orders.status == "incomplete"
+                          ? "Incomplete"
+                          : "Completed"}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -98,7 +166,16 @@ function ServicerOrderDetailPage({ navigation, route }) {
             </Card>
           </View>
 
-          <View style={styles.button}></View>
+          {orders.status == "completed" ? null : (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => OrderAlert()}
+              >
+                <Text style={styles.buttonTitle}>Completed</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -144,6 +221,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: "93%",
     paddingBottom: 10,
+    height: 300,
   },
   cardContent: {
     shadowColor: "#000000",
@@ -177,11 +255,25 @@ const styles = StyleSheet.create({
     top: -3,
     paddingLeft: 10,
   },
+  buttonContainer: {
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
   button: {
-    minWidth: "90%",
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: 5,
+    paddingRight: 5,
+    height: 40,
+    borderRadius: 5,
+    backgroundColor: "#1fae51",
+    minWidth: "85%",
+  },
+  buttonTitle: {
+    fontSize: 20,
+    color: "#FFFFFF",
   },
 });
 

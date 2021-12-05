@@ -22,7 +22,7 @@ const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function ServicerCompletedOrderPage(props) {
+function ServicerCompletedOrderPage({ navigation, route }) {
   // fresh page function
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -65,7 +65,14 @@ function ServicerCompletedOrderPage(props) {
           orders.map((order, i) => {
             return (
               <View style={styles.cardContainer} key={i}>
-                <Card style={styles.cardContent}>
+                <Card
+                  style={styles.cardContent}
+                  onPress={() =>
+                    navigation.navigate("ServicerOrderDetailPage", {
+                      order_id: order.id,
+                    })
+                  }
+                >
                   <Card.Content>
                     <View style={styles.row}>
                       {/* <View style={styles.merchantImage}>
