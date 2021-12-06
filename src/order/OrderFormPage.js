@@ -9,7 +9,6 @@ import {
   Alert,
 } from "react-native";
 import { TextInput } from "react-native-paper";
-import { AntDesign } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import MainButton from "../component/MainButton";
 import { Picker } from "@react-native-picker/picker";
@@ -47,8 +46,8 @@ function OrderFormPage({ navigation, route }) {
 
   const t =
     (date.getHours().toString() >= 0 && date.getHours().toString() < 10
-      ? "0" + (date.getHours() + 8).toString()
-      : (date.getHours() + 8).toString()) +
+      ? "0" + date.getHours().toString()
+      : date.getHours().toString()) +
     ":" +
     (date.getMinutes().toString() >= 0 && date.getMinutes().toString() < 10
       ? "0" + date.getMinutes().toString()
@@ -69,7 +68,7 @@ function OrderFormPage({ navigation, route }) {
 
   const booking = () => {
     console.log(date.getHours().toString());
-    if (date.getHours().toString() < 10 || date.getHours().toString() > 18) {
+    if (date.getHours().toString() < 10 || date.getHours().toString() >= 18) {
       Alert.alert("Time Invaild!", "Selected Time not Under Service Time!", [
         {
           text: "Cancel",
@@ -107,7 +106,10 @@ function OrderFormPage({ navigation, route }) {
                 onValueChange={(itemValue, itemIndex) => setLocation(itemValue)}
               >
                 <Picker.Item label="Select Location" value="" />
-                <Picker.Item label="JavaScript" value="js" />
+                <Picker.Item
+                  label="No 5, Jln Impian Emas 2, Taman Impian Emas"
+                  value="No 5, Jln Impian Emas 2, Taman Impian Emas"
+                />
               </Picker>
             </View>
             <Text style={styles.text}>Package</Text>
@@ -154,8 +156,8 @@ function OrderFormPage({ navigation, route }) {
                 value={
                   (date.getHours().toString() >= 0 &&
                   date.getHours().toString() < 10
-                    ? "0" + (date.getHours() + 8).toString()
-                    : (date.getHours() + 8).toString()) +
+                    ? "0" + date.getHours().toString()
+                    : date.getHours().toString()) +
                   ":" +
                   (date.getMinutes().toString() >= 0 &&
                   date.getMinutes().toString() < 10

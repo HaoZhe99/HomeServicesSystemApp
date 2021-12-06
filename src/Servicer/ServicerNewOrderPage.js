@@ -4,18 +4,13 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  Image,
   ScrollView,
   RefreshControl,
   TouchableOpacity,
 } from "react-native";
-import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
-import { AntDesign } from "@expo/vector-icons";
-import logo from ".././../assets/homeIcon.png";
+import { Card, Paragraph } from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 const wait = (timeout) => {
@@ -49,17 +44,6 @@ function ServicerNewOrderPage({ navigation, route }) {
     return data.data;
   };
 
-  // const viewOrder = () => {
-  //   // navigation.navigate("ServicerOrderDetailPage", {
-  //   //   // id: order_id,
-  //   //   // time: t,
-  //   //   // location: location,
-  //   //   // package: servicePackage,
-  //   //   // merchant_id: route.params.merchant_id,
-  //   //   // merchant_name: route.params.merchant_name,
-  //   // });
-  // };
-  // console.log(orders);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

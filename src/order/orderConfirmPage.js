@@ -7,7 +7,7 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
-import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
+import { Card, Paragraph } from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -34,6 +34,7 @@ function orderConfirmPage({ navigation, route }) {
     package_id: route.params.package,
     status: "incomplete",
     price: "99",
+    user_id: 4,
   };
 
   const orderDone = () => {
@@ -51,8 +52,6 @@ function orderConfirmPage({ navigation, route }) {
       console.log(error.message);
     }
   };
-
-  // console.log(route.params);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -92,7 +91,7 @@ function orderConfirmPage({ navigation, route }) {
                         size={16}
                         color="black"
                       />
-                      <Text style={styles.text}>Price</Text>
+                      <Text style={styles.text}>RM 99</Text>
                     </View>
                   </View>
                 </View>

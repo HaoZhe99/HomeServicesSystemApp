@@ -8,9 +8,11 @@ import {
   ScrollView,
   RefreshControl,
   TouchableOpacity,
+  Alert,
+  Pressable,
+  Modal,
 } from "react-native";
-import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
-import { AntDesign } from "@expo/vector-icons";
+import { Card, Paragraph } from "react-native-paper";
 import logo from ".././../assets/homeIcon.png";
 
 const wait = (timeout) => {
@@ -25,8 +27,6 @@ function OrderViewPage(props) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const buttonStatus = "Incompleted";
-
   //get orders
   const [orders, setOrder] = React.useState([]);
   useEffect(() => {
@@ -35,7 +35,7 @@ function OrderViewPage(props) {
       setOrder(orderFromServer);
     };
     getOrder();
-  }, []);
+  }, [refreshing]);
 
   const fetchOrder = async () => {
     const res = await fetch("http://10.0.2.2:8000/api/v1/orders");
@@ -43,6 +43,18 @@ function OrderViewPage(props) {
     console.log(data.data[0].date);
     return data.data;
   };
+
+  const CommentAndRate = () => {
+    Alert.alert("Alert Title", "My Alert Msg", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => Alert.alert("OK Pressed") },
+    ]);
+  };
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -70,11 +82,31 @@ function OrderViewPage(props) {
                       </Paragraph>
                     </View>
                     <View style={styles.buttonContainer}>
-                      <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonTitle}>{buttonStatus}</Text>
+                      <TouchableOpacity
+                        style={
+                          order.status == "incomplete"
+                            ? styles.buttonRed
+                            : styles.buttonGreen
+                        }
+                      >
+                        <Text style={styles.buttonTitle}>
+                          {order.status == "incomplete"
+                            ? "Incomplete"
+                            : "Completed"}
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
+                  {order.status == "completed" ? (
+                    <View style={styles.CommentAndRateContaniner}>
+                      <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => CommentAndRate()}
+                      >
+                        <Text style={styles.title}>Comment And Rate</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : null}
                 </Card.Content>
               </Card>
             </View>
@@ -94,7 +126,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     minWidth: "100%",
-    height: 100,
+    height: 135,
     marginTop: 25,
     textAlign: "center",
     alignItems: "center",
@@ -133,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "30%",
   },
-  button: {
+  buttonRed: {
     alignItems: "center",
     justifyContent: "center",
     width: 100,
@@ -141,8 +173,35 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#FF2400",
   },
+  buttonGreen: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 100,
+    height: 30,
+    borderRadius: 5,
+    backgroundColor: "#1fae51",
+  },
   buttonTitle: {
     color: "#FFFFFF",
+  },
+  CommentAndRateContaniner: {
+    marginTop: 10,
+    height: 35,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 32,
+    borderRadius: 5,
+    elevation: 3,
+    backgroundColor: "#009ca7",
+  },
+  title: {
+    fontSize: 16,
+    lineHeight: 21,
+    letterSpacing: 0.25,
+    color: "white",
   },
 });
 
