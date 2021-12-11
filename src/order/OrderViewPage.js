@@ -9,17 +9,21 @@ import {
   RefreshControl,
   TouchableOpacity,
   Alert,
-  Pressable,
   Modal,
+  Pressable,
 } from "react-native";
-import { Card, Paragraph } from "react-native-paper";
+import { Card, Paragraph, RadioButton, TextInput } from "react-native-paper";
 import logo from ".././../assets/homeIcon.png";
+import { AntDesign } from "@expo/vector-icons";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
 function OrderViewPage(props) {
+  //modal
+  const [modalVisible, setModalVisible] = useState(false);
+
   // fresh page function
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -40,21 +44,34 @@ function OrderViewPage(props) {
   const fetchOrder = async () => {
     const res = await fetch("http://10.0.2.2:8000/api/v1/orders");
     const data = await res.json();
-    console.log(data.data[0].date);
+    // console.log(data.data[0].date);
     return data.data;
   };
 
-  const CommentAndRate = () => {
-    Alert.alert("Alert Title", "My Alert Msg", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      { text: "OK", onPress: () => Alert.alert("OK Pressed") },
-    ]);
+  const [orderId, setOrderId] = React.useState("");
+  // console.log(orderId);
+
+  // //get orders Detail
+  const [orderDetail, setOrderDetail] = React.useState("");
+  useEffect(() => {
+    const getOrderDetail = async () => {
+      const orderDetailFromServer = await fetchOrderDetil();
+      setOrderDetail(orderDetailFromServer);
+    };
+    getOrderDetail();
+  }, [refreshing]);
+
+  const fetchOrderDetil = async () => {
+    const res = await fetch("http://10.0.2.2:8000/api/v1/orders/" + orderId);
+    const data = await res.json();
+    // console.log(data.data.merchant.name);
+    return data.data;
   };
-  const [modalVisible, setModalVisible] = useState(false);
+
+  const [rate, setRate] = React.useState(5);
+  const [comment, setComment] = React.useState("");
+
+  console.log(comment);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -64,54 +81,183 @@ function OrderViewPage(props) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {orders.map((order, i) => {
-          return (
-            <View style={styles.cardContainer} key={i}>
-              <Card style={styles.cardContent}>
-                <Card.Content>
-                  <View style={styles.row}>
-                    <View style={styles.merchantImage}>
-                      <Image source={logo} style={{ width: 65, height: 65 }} />
-                    </View>
-                    <View style={styles.OrderText}>
-                      <Paragraph numberOfLines={2}>
-                        {order.merchant.name}
-                      </Paragraph>
-                      <Paragraph>
-                        {order.date} at {order.time}
-                      </Paragraph>
-                    </View>
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                        style={
-                          order.status == "incomplete"
-                            ? styles.buttonRed
-                            : styles.buttonGreen
-                        }
-                      >
-                        <Text style={styles.buttonTitle}>
-                          {order.status == "incomplete"
-                            ? "Incomplete"
-                            : "Completed"}
-                        </Text>
-                      </TouchableOpacity>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            console.log("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>
+                {orderDetail.merchant == undefined
+                  ? null
+                  : orderDetail.merchant.name}
+              </Text>
+              <View style={styles.RBC}>
+                <RadioButton.Group
+                  onValueChange={(rate) => setRate(rate)}
+                  value={rate}
+                >
+                  <View style={styles.radioButtonContainer}>
+                    <View style={styles.row}>
+                      <View style={styles.rowAndPadding}>
+                        <View style={styles.radioButtonIcons}>
+                          <AntDesign name="star" size={36} color="#FFEF00" />
+                        </View>
+                        <View style={styles.radioButton}>
+                          <RadioButton value={1} />
+                        </View>
+                      </View>
+
+                      <View style={styles.rowAndPadding}>
+                        <View style={styles.radioButtonIcons}>
+                          <AntDesign
+                            name="star"
+                            size={36}
+                            color={rate === 1 ? "black" : "#FFEF00"}
+                          />
+                        </View>
+                        <View style={styles.radioButton}>
+                          <RadioButton value={2} />
+                        </View>
+                      </View>
+
+                      <View style={styles.rowAndPadding}>
+                        <View style={styles.radioButtonIcons}>
+                          <AntDesign
+                            name="star"
+                            size={36}
+                            color={
+                              rate === 2 || rate === 1 ? "black" : "#FFEF00"
+                            }
+                          />
+                        </View>
+                        <View style={styles.radioButton}>
+                          <RadioButton value={3} />
+                        </View>
+                      </View>
+
+                      <View style={styles.rowAndPadding}>
+                        <View style={styles.radioButtonIcons}>
+                          <AntDesign
+                            name="star"
+                            size={36}
+                            color={
+                              rate === 3 || rate === 2 || rate === 1
+                                ? "black"
+                                : "#FFEF00"
+                            }
+                          />
+                        </View>
+                        <View style={styles.radioButton}>
+                          <RadioButton value={4} />
+                        </View>
+                      </View>
+
+                      <View style={styles.rowAndPadding}>
+                        <View style={styles.radioButtonIcons}>
+                          <AntDesign
+                            name="star"
+                            size={36}
+                            color={
+                              rate === 4 ||
+                              rate === 3 ||
+                              rate === 2 ||
+                              rate === 1
+                                ? "black"
+                                : "#FFEF00"
+                            }
+                          />
+                        </View>
+                        <View style={styles.radioButton}>
+                          <RadioButton value={5} />
+                        </View>
+                      </View>
                     </View>
                   </View>
-                  {order.status == "completed" ? (
-                    <View style={styles.CommentAndRateContaniner}>
-                      <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => CommentAndRate()}
-                      >
-                        <Text style={styles.title}>Comment And Rate</Text>
-                      </TouchableOpacity>
-                    </View>
-                  ) : null}
-                </Card.Content>
-              </Card>
+                </RadioButton.Group>
+              </View>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  label="Comment"
+                  placeholder="Type Comment ......"
+                  mode="outlined"
+                  value={comment}
+                  onChangeText={(comment) => setComment(comment)}
+                />
+              </View>
+
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
             </View>
-          );
-        })}
+          </View>
+        </Modal>
+        <>
+          {orders.map((order, i) => {
+            return (
+              <View style={styles.cardContainer} key={i}>
+                <Card style={styles.cardContent}>
+                  <Card.Content>
+                    <View style={styles.row}>
+                      <View style={styles.merchantImage}>
+                        <Image
+                          source={logo}
+                          style={{ width: 65, height: 65 }}
+                        />
+                      </View>
+                      <View style={styles.OrderText}>
+                        <Paragraph numberOfLines={2}>
+                          {order.merchant.name}
+                        </Paragraph>
+                        <Paragraph>
+                          {order.date} at {order.time}
+                        </Paragraph>
+                      </View>
+                      <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                          style={
+                            order.status == "incomplete"
+                              ? styles.buttonRed
+                              : styles.buttonGreen
+                          }
+                        >
+                          <Text style={styles.buttonTitle}>
+                            {order.status == "incomplete"
+                              ? "Incomplete"
+                              : "Completed"}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    {order.status == "completed" ? (
+                      <View style={styles.CommentAndRateContaniner}>
+                        <TouchableOpacity
+                          style={styles.button}
+                          onPress={() => {
+                            setModalVisible(true);
+                            setOrderId(order.merchant.id);
+                            setRefreshing(true);
+                            wait(500).then(() => setRefreshing(false));
+                          }}
+                        >
+                          <Text style={styles.title}>Comment And Rate</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : null}
+                  </Card.Content>
+                </Card>
+              </View>
+            );
+          })}
+        </>
       </ScrollView>
     </SafeAreaView>
   );
@@ -126,7 +272,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     minWidth: "100%",
-    height: 135,
+    maxHeight: 135,
     marginTop: 25,
     textAlign: "center",
     alignItems: "center",
@@ -202,6 +348,70 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     letterSpacing: 0.25,
     color: "white",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    // margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: "90%",
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  radioButtonContainer: {
+    width: 240,
+    // backgroundColor: "red",
+    marginBottom: 15,
+  },
+  radioButton: {
+    elevation: 1,
+    left: -36,
+    bottom: -1,
+    // backgroundColor: "black",
+  },
+  radioButtonIcons: {
+    elevation: 2,
+  },
+  rowAndPadding: {
+    flexDirection: "row",
+    marginLeft: -20,
+    right: -20,
+  },
+  RBC: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textInputContainer: {
+    height: 100,
+    width: "90%",
   },
 });
 
