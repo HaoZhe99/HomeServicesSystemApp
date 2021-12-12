@@ -15,12 +15,13 @@ import {
 import { Card, Paragraph, RadioButton, TextInput } from "react-native-paper";
 import logo from ".././../assets/homeIcon.png";
 import { AntDesign } from "@expo/vector-icons";
+import axios from "axios";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function OrderViewPage(props) {
+function OrderViewPage({ navigation }) {
   //modal
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -71,7 +72,41 @@ function OrderViewPage(props) {
   const [rate, setRate] = React.useState(5);
   const [comment, setComment] = React.useState("");
 
-  console.log(comment);
+  const data = {
+    comment: comment,
+    rate: rate,
+  };
+
+  const commentDone = () => {
+    try {
+      axios
+        .post(
+          "http://10.0.2.2:8000/api/v1/orders/commentAndRate/" + orderId,
+          data
+        )
+        .then(function (response) {
+          // handle success
+          console.log(JSON.stringify(response.data));
+        });
+      navigation.navigate("CommentSuccessfullyPage", {
+        hearder: "false",
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+    console.log("no");
+  };
+
+  const commentAlert = () => {
+    Alert.alert("Are You Sure?", "Make Sure Your Message!", [
+      { text: "Subimit", onPress: () => commentDone() },
+      {
+        text: "Cancel",
+      },
+    ]);
+  };
+
+  // console.log(comment);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -92,7 +127,7 @@ function OrderViewPage(props) {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>
+              <Text style={styles.modalText} numberOfLines={2}>
                 {orderDetail.merchant == undefined
                   ? null
                   : orderDetail.merchant.name}
@@ -190,13 +225,29 @@ function OrderViewPage(props) {
                   onChangeText={(comment) => setComment(comment)}
                 />
               </View>
-
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
+              <View style={styles.row}>
+                <Pressable
+                  style={[styles.button, styles.buttonOpen]}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    commentAlert();
+                    setComment("");
+                    setRate(5);
+                  }}
+                >
+                  <Text style={styles.textStyle}>Submit</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    setComment("");
+                    setRate(5);
+                  }}
+                >
+                  <Text style={styles.textStyle}>Cancel</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </Modal>
@@ -372,10 +423,14 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "#009ca7",
+    marginRight: 10,
+    marginTop: -10,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#FF2400",
+    marginLeft: 10,
+    marginTop: -10,
   },
   textStyle: {
     color: "white",
@@ -383,6 +438,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
+    fontSize: 18,
     marginBottom: 15,
     textAlign: "center",
   },
@@ -412,6 +468,9 @@ const styles = StyleSheet.create({
   textInputContainer: {
     height: 100,
     width: "90%",
+  },
+  commentButton: {
+    flexDirection: "row",
   },
 });
 

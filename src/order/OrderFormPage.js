@@ -86,6 +86,7 @@ function OrderFormPage({ navigation, route }) {
       });
     }
   };
+  console.log(route.params.merchant_id);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -148,6 +149,7 @@ function OrderFormPage({ navigation, route }) {
                 label="Date"
                 style={styles.dateInput}
                 activeOutlineColor="#009ca7"
+                outlineColor="#009ca7"
                 onChangeText={(date) => setDate(date)}
                 right={<TextInput.Icon name="calendar" />}
                 onFocus={showDatepicker}
@@ -168,6 +170,7 @@ function OrderFormPage({ navigation, route }) {
                 label="Time"
                 style={styles.timeInput}
                 activeOutlineColor="#009ca7"
+                outlineColor="#009ca7"
                 right={<TextInput.Icon name="clock" />}
                 onChangeText={(date) => setDate(date)}
                 onFocus={showTimepicker}

@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
@@ -58,7 +59,14 @@ function MerchantMenuPage({ navigation, route }) {
                 <Card style={styles.cardContent}>
                   <Card.Content>
                     <View style={styles.row}>
-                      <View style={styles.cardDetail}>
+                      <TouchableOpacity
+                        style={styles.cardDetail}
+                        onPress={() =>
+                          navigation.navigate("MerchantDetailPage", {
+                            merchant_id: merchant.id,
+                          })
+                        }
+                      >
                         <Paragraph numberOfLines={1}>{merchant.name}</Paragraph>
                         <Paragraph style={styles.cardTitlle}>
                           {merchant.categories[0].name}
@@ -70,7 +78,7 @@ function MerchantMenuPage({ navigation, route }) {
                               <AntDesign
                                 name="star"
                                 size={14}
-                                color="black"
+                                color="#FFEF00"
                                 marginRight={10}
                               />
                               5.0
@@ -81,7 +89,7 @@ function MerchantMenuPage({ navigation, route }) {
                             <Paragraph>$20/h</Paragraph>
                           </View>
                         </View>
-                      </View>
+                      </TouchableOpacity>
                       <View style={styles.cardButton}>
                         <View style={styles.button}>
                           <MainButton

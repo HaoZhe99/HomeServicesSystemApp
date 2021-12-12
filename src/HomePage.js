@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
 import logo from "../assets/homeIcon.png";
@@ -128,7 +129,14 @@ function HomePage({ navigation }) {
           </>
         </View>
 
-        <View style={styles.companyDetailsContainer}>
+        <TouchableOpacity
+          style={styles.companyDetailsContainer}
+          onPress={() =>
+            navigation.navigate("MerchantDetailPage", {
+              merchant_id: categoryRandom.id,
+            })
+          }
+        >
           <Image source={logo} style={{ width: 120, height: 120 }} />
           <View style={styles.companyDetailsText}>
             <Paragraph style={styles.paragraph} numberOfLines={1}>
@@ -138,7 +146,7 @@ function HomePage({ navigation }) {
               {categoryRandom.description}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -160,6 +168,7 @@ const styles = StyleSheet.create({
   },
   paragraphDetail: {
     height: 80,
+    width: "100%",
     color: "black",
   },
   searchContainer: {

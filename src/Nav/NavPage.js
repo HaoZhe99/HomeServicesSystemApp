@@ -5,6 +5,7 @@ import OrderFormPage from "../order/OrderFormPage";
 import orderConfirmPage from "../order/orderConfirmPage";
 import HomePage from "../HomePage";
 import OrderSuccefullyPage from "../order/OrderSuccefullyPage";
+import MerchantDetailPage from "../merchant/MerchantDetailPage";
 
 const NavStack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ function NavPage({ props }) {
       }}
     >
       <NavStack.Screen name="Home" component={HomePage} />
+      <NavStack.Screen name="MerchantDetailPage" component={MerchantDetailPage} />
       <NavStack.Screen name="MerchantMenuPage" component={MerchantMenuPage} />
       <NavStack.Screen name="OrderFormPage" component={OrderFormPage} />
       <NavStack.Screen name="orderConfirmPage" component={orderConfirmPage} />
