@@ -185,7 +185,6 @@ const styles = StyleSheet.create({
   cardPrice: { left: "100%" },
   cardButton: {
     width: "40%",
-    minHeight: 100,
     // backgroundColor: "red",
   },
   button: {

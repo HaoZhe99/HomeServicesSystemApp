@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -26,7 +26,6 @@ function OrderFormPage({ navigation, route }) {
   }, []);
 
   const [location, setLocation] = React.useState("");
-  const [servicePackage, setPackage] = React.useState("");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("");
   const [show, setShow] = useState(false);
@@ -86,7 +85,28 @@ function OrderFormPage({ navigation, route }) {
       });
     }
   };
-  console.log(route.params.merchant_id);
+
+  // get package
+  const [servicePackages, setPackage] = React.useState("");
+  useEffect(() => {
+    const getPackage = async () => {
+      const packageFromServer = await fetchPackage();
+      setPackage(packageFromServer);
+    };
+    getPackage();
+  }, []);
+
+  const fetchPackage = async () => {
+    const res = await fetch(
+      "http://10.0.2.2:8000/api/v1/packages/packageFilter/" +
+        route.params.merchant_id
+    );
+    const data = await res.json();
+    // console.log(data.data[1].id);
+    return data.data;
+  };
+
+  console.log(servicePackages[0] == undefined ? null : servicePackages[0].id);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -117,11 +137,17 @@ function OrderFormPage({ navigation, route }) {
             <View style={styles.picker}>
               <Picker
                 style={styles.pickerInner}
-                selectedValue={servicePackage}
+                selectedValue={servicePackages}
                 onValueChange={(itemValue, itemIndex) => setPackage(itemValue)}
               >
                 <Picker.Item label="Select Package" value="" />
-                <Picker.Item label="Package A" value={1} />
+                {servicePackages[0] == undefined
+                  ? null
+                  : servicePackages.map((pacakage, i) => {
+                      return (
+                        <Picker.Item label={pacakage.name} value={1} key={i} />
+                      );
+                    })}
               </Picker>
             </View>
             <View style={styles.dateAndTimeContainer}>
