@@ -7,10 +7,12 @@ import {
   ScrollView,
   RefreshControl,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
 import MainButton from "../component/MainButton";
+import logo from ".././../assets/homeIcon.png";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -41,12 +43,42 @@ function MerchantDetailPage({ navigation, route }) {
     const data = await res.json();
     return data.data;
   };
-  // console.log(merchants.state);
+
+  //get orders
+  const [orders, setOrder] = React.useState("");
+  useEffect(() => {
+    const getOrder = async () => {
+      const orderFromServer = await fetchOrder();
+      setOrder(orderFromServer);
+    };
+    getOrder();
+  }, [refreshing]);
+
+  const fetchOrder = async () => {
+    const res = await fetch(
+      "http://10.0.2.2:8000/api/v1/orders/orderWithComment/" +
+        route.params.merchant_id
+    );
+    const data = await res.json();
+    return data.data;
+  };
+
+  const [click, setClick] = React.useState("down");
+
+  const clickFuntion = () => {
+    if (click === "down") {
+      console.log("down");
+      setClick("up");
+    } else {
+      console.log("up");
+      setClick("down");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.container}
+        style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -130,7 +162,125 @@ function MerchantDetailPage({ navigation, route }) {
                 }
               />
             </View>
+            <Card style={styles.cardContent}>
+              <Card.Content>
+                <View style={[styles.commentTextContainer, styles.row]}>
+                  <View style={styles.commentIconPostionRight}>
+                    <Paragraph style={styles.abc}>Comment</Paragraph>
+                  </View>
+                  <TouchableOpacity onPress={() => clickFuntion()}>
+                    {click === "down" ? (
+                      <AntDesign name="downcircleo" size={24} color="black" />
+                    ) : (
+                      <AntDesign name="upcircleo" size={24} color="black" />
+                    )}
+                  </TouchableOpacity>
+                </View>
+              </Card.Content>
+            </Card>
           </View>
+          {click === "down"
+            ? orders[0] == undefined
+              ? null
+              : orders.map((order, i) => {
+                  return order.rate == null ? null : (
+                    <View style={styles.cardContainer} key={i}>
+                      <Card style={styles.cardContent}>
+                        <Card.Content>
+                          <View style={styles.row}>
+                            <View style={styles.cardDetail}>
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  paddingBottom: 10,
+                                }}
+                              >
+                                <View style={styles.merchantImage}>
+                                  <Image
+                                    source={logo}
+                                    style={{
+                                      width: 35,
+                                      height: 35,
+                                      marginRight: 10,
+                                    }}
+                                  />
+                                </View>
+                                <Paragraph>{order.user.name}</Paragraph>
+                              </View>
+                              <View style={[styles.row, styles.rateContanier]}>
+                                <View style={styles.rate}>
+                                  <AntDesign
+                                    name="star"
+                                    size={24}
+                                    color={"#FFEF00"}
+                                  />
+                                </View>
+                                <View style={styles.rate}>
+                                  <AntDesign
+                                    name="star"
+                                    size={24}
+                                    color={
+                                      order.rate === 1 ? "black" : "#FFEF00"
+                                    }
+                                  />
+                                </View>
+                                <View style={styles.rate}>
+                                  <AntDesign
+                                    name="star"
+                                    size={24}
+                                    color={
+                                      order.rate === 2 || order.rate === 1
+                                        ? "black"
+                                        : "#FFEF00"
+                                    }
+                                  />
+                                </View>
+                                <View style={styles.rate}>
+                                  <AntDesign
+                                    name="star"
+                                    size={24}
+                                    color={
+                                      order.rate === 3 ||
+                                      order.rate === 2 ||
+                                      order.rate === 1
+                                        ? "black"
+                                        : "#FFEF00"
+                                    }
+                                  />
+                                </View>
+                                <View style={styles.rate}>
+                                  <AntDesign
+                                    name="star"
+                                    size={24}
+                                    color={
+                                      order.rate === 4 ||
+                                      order.rate === 3 ||
+                                      order.rate === 2 ||
+                                      order.rate === 1
+                                        ? "black"
+                                        : "#FFEF00"
+                                    }
+                                  />
+                                </View>
+                                <View style={styles.rate}>
+                                  <Paragraph>{order.updated_at}</Paragraph>
+                                </View>
+                              </View>
+                              {order.comment == "" ||
+                              order.comment == null ? null : (
+                                <View>
+                                  <Paragraph>{order.comment}</Paragraph>
+                                </View>
+                              )}
+                            </View>
+                          </View>
+                        </Card.Content>
+                      </Card>
+                    </View>
+                  );
+                })
+            : null}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -138,6 +288,11 @@ function MerchantDetailPage({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    // flex: 1,
+    textAlign: "center",
+    backgroundColor: "#FFFFFF",
+  },
   container: {
     flex: 1,
     textAlign: "center",
@@ -149,7 +304,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-    marginTop: 50,
+    marginTop: 30,
     minWidth: "100%",
     minHeight: "100%",
     borderTopStartRadius: 20,
@@ -172,7 +327,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: "90%",
-    maxHeight: 1000,
+    maxHeight: 100000,
   },
   cardTitlle: {
     color: "#009ca7",
@@ -189,14 +344,16 @@ const styles = StyleSheet.create({
     shadowRadius: 16.0,
     elevation: 24,
     borderRadius: 10,
+    maxHeight: 5000,
+    marginBottom: 10,
   },
   row: {
     flexDirection: "row",
   },
   cardDetail: {
     width: "100%",
-    maxHeight: 500,
-    marginBottom: -80,
+    maxHeight: 1000,
+    paddingBottom: -80,
   },
   cardInner: {
     flexDirection: "row",
@@ -208,9 +365,22 @@ const styles = StyleSheet.create({
     minHeight: 100,
   },
   button: {
-    paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
+  },
+  commentTextContainer: {
+    width: "100%",
+    // justifyContent: "flex-end",
+  },
+  rateContanier: {
+    maxHeight: 100,
+    marginBottom: 5,
+  },
+  rate: {
+    paddingRight: 8,
+  },
+  commentIconPostionRight: {
+    width: "90%",
   },
 });
 

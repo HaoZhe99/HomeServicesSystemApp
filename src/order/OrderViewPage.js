@@ -288,7 +288,7 @@ function OrderViewPage({ navigation }) {
                         </TouchableOpacity>
                       </View>
                     </View>
-                    {order.status == "completed" ? (
+                    {order.status == "completed" && order.rate == null ? (
                       <View style={styles.CommentAndRateContaniner}>
                         <TouchableOpacity
                           style={styles.button}
