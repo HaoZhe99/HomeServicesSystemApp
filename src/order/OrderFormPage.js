@@ -65,26 +65,7 @@ function OrderFormPage({ navigation, route }) {
     showMode("time");
   };
 
-  const booking = () => {
-    console.log(date.getHours().toString());
-    if (date.getHours().toString() < 10 || date.getHours().toString() >= 18) {
-      Alert.alert("Time Invaild!", "Selected Time not Under Service Time!", [
-        {
-          text: "Cancel",
-        },
-        { text: "Ok" },
-      ]);
-    } else {
-      navigation.navigate("orderConfirmPage", {
-        date: d,
-        time: t,
-        location: location,
-        package: servicePackage,
-        merchant_id: route.params.merchant_id,
-        merchant_name: route.params.merchant_name,
-      });
-    }
-  };
+  const [p, setP] = React.useState("");
 
   // get package
   const [servicePackages, setPackage] = React.useState("");
@@ -102,11 +83,61 @@ function OrderFormPage({ navigation, route }) {
         route.params.merchant_id
     );
     const data = await res.json();
-    // console.log(data.data[1].id);
     return data.data;
   };
 
-  console.log(servicePackages[0] == undefined ? null : servicePackages[0].id);
+  const [paymentMethod, setPaymentMethod] = React.useState("");
+
+  const booking = () => {
+    console.log(date.getHours().toString());
+    if (date.getHours().toString() < 10 || date.getHours().toString() >= 18) {
+      Alert.alert("Time Invaild!", "Selected Time not Under Service Time!", [
+        {
+          text: "Cancel",
+        },
+        { text: "Ok" },
+      ]);
+    } else {
+      if (
+        d == null ||
+        t == null ||
+        location == "" ||
+        servicePackages == "" ||
+        paymentMethod == ""
+      ) {
+        Alert.alert("Input Invaild!", "Data Cannot be Empty!", [
+          {
+            text: "Cancel",
+          },
+          { text: "Ok" },
+        ]);
+      } else {
+        if (paymentMethod === "cash") {
+          navigation.navigate("orderConfirmPage", {
+            date: d,
+            time: t,
+            payment_method: paymentMethod,
+            location: location,
+            package: p,
+            merchant_id: route.params.merchant_id,
+            merchant_name: route.params.merchant_name,
+          });
+        } else {
+          navigation.navigate("PaymentPage", {
+            date: d,
+            time: t,
+            payment_method: paymentMethod,
+            location: location,
+            package: p,
+            merchant_id: route.params.merchant_id,
+            merchant_name: route.params.merchant_name,
+          });
+        }
+      }
+    }
+  };
+
+  // console.log(servicePackages[0] == undefined ? null : servicePackages[0].id);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -137,15 +168,20 @@ function OrderFormPage({ navigation, route }) {
             <View style={styles.picker}>
               <Picker
                 style={styles.pickerInner}
-                selectedValue={servicePackages}
-                onValueChange={(itemValue, itemIndex) => setPackage(itemValue)}
+                selectedValue={p}
+                onValueChange={(itemValue) => setP(itemValue)}
               >
                 <Picker.Item label="Select Package" value="" />
-                {servicePackages[0] == undefined
+                {servicePackages.length == 0
                   ? null
                   : servicePackages.map((pacakage, i) => {
+                      console.log(pacakage.name);
                       return (
-                        <Picker.Item label={pacakage.name} value={1} key={i} />
+                        <Picker.Item
+                          label={pacakage.name}
+                          value={pacakage.name}
+                          key={i}
+                        />
                       );
                     })}
               </Picker>
@@ -203,6 +239,19 @@ function OrderFormPage({ navigation, route }) {
               />
             </View>
 
+            <Text style={styles.text}>Payment Method</Text>
+            <View style={styles.picker}>
+              <Picker
+                style={styles.pickerInner}
+                selectedValue={paymentMethod}
+                onValueChange={(itemValue) => setPaymentMethod(itemValue)}
+              >
+                <Picker.Item label="Select Payment Method" value="" />
+                <Picker.Item label="Cash" value="cash" />
+                <Picker.Item label="Credit/Debit Card" value="credit/debit" />
+              </Picker>
+            </View>
+
             <View style={styles.button}>
               <MainButton title="Booking" onPress={() => booking()} />
             </View>
@@ -257,6 +306,7 @@ const styles = StyleSheet.create({
   },
   dateAndTimeContainer: {
     flexDirection: "row",
+    paddingBottom: 15,
   },
   dateInput: {
     width: 200,

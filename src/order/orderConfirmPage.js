@@ -38,19 +38,20 @@ function orderConfirmPage({ navigation, route }) {
   };
 
   const orderDone = () => {
-    try {
-      axios
-        .post("http://10.0.2.2:8000/api/v1/orders", data)
-        .then(function (response) {
-          // handle success
-          console.log(JSON.stringify(response.data));
-        });
-      navigation.navigate("OrderSuccefullyPage", {
-        hearder: "false",
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
+    navigation.navigate("PaymentPage", data);
+    // try {
+    //   axios
+    //     .post("http://10.0.2.2:8000/api/v1/orders", data)
+    //     .then(function (response) {
+    //       // handle success
+    //       console.log(JSON.stringify(response.data));
+    //     });
+    //   navigation.navigate("OrderSuccefullyPage", {
+    //     hearder: "false",
+    //   });
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
   };
 
   return (
@@ -87,6 +88,14 @@ function orderConfirmPage({ navigation, route }) {
                     </View>
                     <View style={styles.textInner}>
                       <MaterialIcons
+                        name="miscellaneous-services"
+                        size={18}
+                        color="black"
+                      />
+                      <Text style={styles.text}>{route.params.package}</Text>
+                    </View>
+                    <View style={styles.textInner}>
+                      <MaterialIcons
                         name="attach-money"
                         size={16}
                         color="black"
@@ -100,7 +109,7 @@ function orderConfirmPage({ navigation, route }) {
           </View>
 
           <View style={styles.button}>
-            <MainButton title="Booking" onPress={() => orderDone()} />
+            <MainButton title="Confirm" onPress={() => orderDone()} />
           </View>
         </View>
       </ScrollView>
