@@ -8,7 +8,7 @@ import {
   RefreshControl,
   Image,
 } from "react-native";
-import { TextInput } from "react-native-paper";
+import { TextInput, Checkbox } from "react-native-paper";
 import MainButton from "../component/MainButton";
 import { AntDesign } from "@expo/vector-icons";
 import card from "../../assets/card.jpg";
@@ -31,6 +31,7 @@ function PaymentPage({ navigation, route }) {
   const [cardNumber, setCardNumbesr] = React.useState("");
   const [dueDate, setDueDate] = React.useState("");
   const [cvv, setCvv] = React.useState("");
+  const [checked, setChecked] = React.useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -116,13 +117,24 @@ function PaymentPage({ navigation, route }) {
               />
             </View>
           </View>
-          <View style={styles.textInputContainer}>
+          <View style={styles.CheckboxContainer}>
+            <View style={styles.row}>
+              <Checkbox
+                status={checked ? "checked" : "unchecked"}
+                onPress={() => {
+                  setChecked(!checked);
+                }}
+              />
+              <Text style={styles.checkBoxText}>Save Card</Text>
+            </View>
+          </View>
+          <View style={styles.textInputRowContainer}>
             <Text style={styles.bottomText}>
               Your card won't be changed until
             </Text>
             <Text style={styles.bottomText}>you review your order.</Text>
           </View>
-          <View style={styles.textInputContainer}>
+          <View style={styles.ButtonContainer}>
             <MainButton title="Next Review Order" />
           </View>
         </View>
@@ -147,7 +159,7 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     paddingRight: 25,
     paddingBottom: 10,
-    maxHeight: 80,
+    maxHeight: 70,
   },
   textInputRowContainer: {
     minWidth: "50%",
@@ -163,7 +175,7 @@ const styles = StyleSheet.create({
     color: "#009ca7",
   },
   textInput: {
-    height: 40,
+    height: 30,
     backgroundColor: "#FFFFFF",
     borderColor: "#a6a6a6",
   },
@@ -180,17 +192,32 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: "100%",
-    height: 45,
+    height: 30,
     borderColor: "#a6a6a6",
     borderRadius: 5,
     borderWidth: 1.5,
     backgroundColor: "#FFFFFF",
     marginTop: 5,
     color: "#a6a6a6",
+    marginBottom: 5,
   },
   pickerInner: {
-    top: -5,
+    top: -13,
     left: 5,
+  },
+  ButtonContainer: {
+    paddingLeft: 25,
+    paddingRight: 25,
+  },
+  CheckboxContainer: {
+    minWidth: "100%",
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingBottom: 10,
+    maxHeight: 90,
+  },
+  checkBoxText: {
+    top: 8,
   },
 });
 

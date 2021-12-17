@@ -86,10 +86,26 @@ function OrderFormPage({ navigation, route }) {
     return data.data;
   };
 
-  const [paymentMethod, setPaymentMethod] = React.useState("");
+  const [pm, setPm] = React.useState([]);
+
+  // get payment method
+  const [paymentMethods, setPaymentMethods] = React.useState([]);
+  useEffect(() => {
+    const getPaymentMethods = async () => {
+      const paymentMethodFromServer = await fetchPaymentMethods();
+      setPaymentMethods(paymentMethodFromServer);
+    };
+    getPaymentMethods();
+  }, []);
+
+  const fetchPaymentMethods = async () => {
+    const res = await fetch("http://10.0.2.2:8000/api/v1/payment-methods");
+    const data = await res.json();
+    return data.data;
+  };
+  console.log(paymentMethods.length == 0 ? null : paymentMethods[0].name);
 
   const booking = () => {
-    console.log(date.getHours().toString());
     if (date.getHours().toString() < 10 || date.getHours().toString() >= 18) {
       Alert.alert("Time Invaild!", "Selected Time not Under Service Time!", [
         {
@@ -98,13 +114,7 @@ function OrderFormPage({ navigation, route }) {
         { text: "Ok" },
       ]);
     } else {
-      if (
-        d == null ||
-        t == null ||
-        location == "" ||
-        servicePackages == "" ||
-        paymentMethod == ""
-      ) {
+      if (d == null || t == null || location == "" || p == "" || pm == "") {
         Alert.alert("Input Invaild!", "Data Cannot be Empty!", [
           {
             text: "Cancel",
@@ -112,11 +122,12 @@ function OrderFormPage({ navigation, route }) {
           { text: "Ok" },
         ]);
       } else {
-        if (paymentMethod === "cash") {
+        // console.log(pm);
+        if (pm === 1) {
           navigation.navigate("orderConfirmPage", {
             date: d,
             time: t,
-            payment_method: paymentMethod,
+            payment_method: pm,
             location: location,
             package: p,
             merchant_id: route.params.merchant_id,
@@ -126,7 +137,7 @@ function OrderFormPage({ navigation, route }) {
           navigation.navigate("PaymentPage", {
             date: d,
             time: t,
-            payment_method: paymentMethod,
+            payment_method: pm,
             location: location,
             package: p,
             merchant_id: route.params.merchant_id,
@@ -175,7 +186,6 @@ function OrderFormPage({ navigation, route }) {
                 {servicePackages.length == 0
                   ? null
                   : servicePackages.map((pacakage, i) => {
-                      console.log(pacakage.name);
                       return (
                         <Picker.Item
                           label={pacakage.name}
@@ -243,12 +253,21 @@ function OrderFormPage({ navigation, route }) {
             <View style={styles.picker}>
               <Picker
                 style={styles.pickerInner}
-                selectedValue={paymentMethod}
-                onValueChange={(itemValue) => setPaymentMethod(itemValue)}
+                selectedValue={pm}
+                onValueChange={(itemValue) => setPm(itemValue)}
               >
                 <Picker.Item label="Select Payment Method" value="" />
-                <Picker.Item label="Cash" value="cash" />
-                <Picker.Item label="Credit/Debit Card" value="credit/debit" />
+                {paymentMethods.length == 0
+                  ? null
+                  : paymentMethods.map((paymentMethod, i) => {
+                      return (
+                        <Picker.Item
+                          label={paymentMethod.name}
+                          value={paymentMethod.id}
+                          key={i}
+                        />
+                      );
+                    })}
               </Picker>
             </View>
 
