@@ -27,7 +27,7 @@ function orderConfirmPage({ navigation, route }) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const data = {
+  const data1 = {
     date: route.params.date,
     time: route.params.time,
     merchant_id: route.params.merchant_id,
@@ -36,22 +36,58 @@ function orderConfirmPage({ navigation, route }) {
     price: "99",
     user_id: 4,
   };
+  const data2 = {
+    bank_of_card: route.params.bank_of_card,
+    name_of_card: route.params.name_of_card,
+    expired_date: route.params.expired_date,
+    cvv: route.params.cvv,
+    card_number: route.params.card_number,
+  };
 
   const orderDone = () => {
-    navigation.navigate("PaymentPage", data);
-    // try {
-    //   axios
-    //     .post("http://10.0.2.2:8000/api/v1/orders", data)
-    //     .then(function (response) {
-    //       // handle success
-    //       console.log(JSON.stringify(response.data));
-    //     });
-    //   navigation.navigate("OrderSuccefullyPage", {
-    //     hearder: "false",
-    //   });
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
+    if (route.params.bank_of_card == null || route.params.bank_of_card == "") {
+      try {
+        axios
+          .post("http://10.0.2.2:8000/api/v1/orders", data1)
+          .then(function (response) {
+            // handle success
+            console.log(JSON.stringify(response.data));
+          });
+        navigation.navigate("OrderSuccefullyPage", {
+          hearder: "false",
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      try {
+        axios
+          .post("http://10.0.2.2:8000/api/v1/orders", data1)
+          .then(function (response) {
+            // handle success
+            console.log(JSON.stringify(response.data));
+          });
+        navigation.navigate("OrderSuccefullyPage", {
+          hearder: "false",
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+
+      try {
+        axios
+          .post("http://10.0.2.2:8000/api/v1/cards", data2)
+          .then(function (response) {
+            // handle success
+            console.log(JSON.stringify(response.data));
+          });
+        navigation.navigate("OrderSuccefullyPage", {
+          hearder: "false",
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
   };
 
   return (

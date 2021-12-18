@@ -13,6 +13,7 @@ import MainButton from "../component/MainButton";
 import { AntDesign } from "@expo/vector-icons";
 import card from "../../assets/card.jpg";
 import { Picker } from "@react-native-picker/picker";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -33,10 +34,38 @@ function PaymentPage({ navigation, route }) {
   const [cvv, setCvv] = React.useState("");
   const [checked, setChecked] = React.useState(false);
 
+  const payment = () => {
+    if (checked == true) {
+      navigation.navigate("orderConfirmPage", {
+        date: route.params.date,
+        time: route.params.time,
+        payment_method: route.params.payment_method,
+        location: route.params.location,
+        package: route.params.package,
+        merchant_id: route.params.merchant_id,
+        merchant_name: route.params.merchant_name,
+        bank_of_card: bank,
+        name_of_card: nameOfCard,
+        card_number: cardNumber,
+        expired_date: dueDate,
+        cvv: cvv,
+      });
+    } else {
+      navigation.navigate("orderConfirmPage", {
+        date: route.params.date,
+        time: route.params.time,
+        payment_method: route.params.payment_method,
+        location: route.params.location,
+        package: route.params.package,
+        merchant_id: route.params.merchant_id,
+        merchant_name: route.params.merchant_name,
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.container}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -57,10 +86,11 @@ function PaymentPage({ navigation, route }) {
                 onValueChange={(itemValue, itemIndex) => setBank(itemValue)}
               >
                 <Picker.Item label="Select Bank" value="" color="#a6a6a6" />
-                <Picker.Item
-                  label="No 5, Jln Impian Emas 2, Taman Impian Emas"
-                  value="No 5, Jln Impian Emas 2, Taman Impian Emas"
-                />
+                <Picker.Item label="HongLeong Bank" value="hongleongBank" />
+                <Picker.Item label="MayBank" value="mayBank" />
+                <Picker.Item label="Public Bank" value="publicBank" />
+                <Picker.Item label="CIMB Bank" value="cimbBank" />
+                <Picker.Item label="RHB Bank" value="rhbBank" />
               </Picker>
             </View>
           </View>
@@ -83,6 +113,7 @@ function PaymentPage({ navigation, route }) {
               placeholder="XXXX XXXX XXXX XXXX"
               placeholderTextColor="#a6a6a6"
               mode="outlined"
+              maxLength={16}
               activeOutlineColor="#009ca7"
               value={cardNumber}
               onChangeText={(cardNumber) => setCardNumbesr(cardNumber)}
@@ -97,7 +128,14 @@ function PaymentPage({ navigation, route }) {
                 placeholderTextColor="#a6a6a6"
                 mode="outlined"
                 activeOutlineColor="#009ca7"
-                value={dueDate}
+                maxLength={5}
+                value={
+                  dueDate == null || dueDate == ""
+                    ? null
+                    : dueDate.length == 4
+                    ? dueDate.substring(0, 2) + "/" + dueDate.substring(2, 4)
+                    : null
+                }
                 onChangeText={(dueDate) => setDueDate(dueDate)}
               />
             </View>
@@ -110,6 +148,7 @@ function PaymentPage({ navigation, route }) {
                 style={styles.textInput}
                 placeholder="XXX"
                 placeholderTextColor="#a6a6a6"
+                maxLength={3}
                 mode="outlined"
                 activeOutlineColor="#009ca7"
                 value={cvv}
@@ -134,9 +173,12 @@ function PaymentPage({ navigation, route }) {
             </Text>
             <Text style={styles.bottomText}>you review your order.</Text>
           </View>
-          <View style={styles.ButtonContainer}>
+          <TouchableOpacity
+            style={styles.ButtonContainer}
+            onPress={() => payment()}
+          >
             <MainButton title="Next Review Order" />
-          </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

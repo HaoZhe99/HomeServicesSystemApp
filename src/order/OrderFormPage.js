@@ -189,7 +189,7 @@ function OrderFormPage({ navigation, route }) {
                       return (
                         <Picker.Item
                           label={pacakage.name}
-                          value={pacakage.name}
+                          value={pacakage.id}
                           key={i}
                         />
                       );
