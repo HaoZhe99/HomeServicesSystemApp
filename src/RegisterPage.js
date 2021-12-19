@@ -12,7 +12,7 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import RegisterSuccessfulPage from "./RegisterSuccessfulPage";
 
-function RegisterPage(props) {
+function RegisterPage({ navigation }) {
   const [username, setUsernameText] = React.useState("");
   const [email, setEmailText] = React.useState("");
   const [password, setPasswordText] = React.useState("");
@@ -24,27 +24,103 @@ function RegisterPage(props) {
     password: password,
   };
 
-  const sendGetRequest = () => {
-    try {
-      axios
-        .post("http://10.0.2.2:8000/api/v1/users/register", data)
-        .then(function (response) {
-          // handle success
-          console.log(JSON.stringify(response.data));
-          Alert.alert("Register Successfully");
-        });
-    } catch (error) {
-      console.log(error.message);
+  const validateEmail = (email) => {
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+    if (emailRegex.test(email)) {
+      return true;
+    } else {
+      return false;
     }
-    setUsernameText("");
-    setEmailText("");
-    setPasswordText("");
-    setConfirmPasswordText("");
+  };
+
+  const sendGetRequest = () => {
+    // validateEmail(email);
+    if (
+      username == "" ||
+      email == "" ||
+      password == "" ||
+      confirmPassword == ""
+    ) {
+      Alert.alert("Input Invaild!", "Data Cannot be Empty!", [
+        {
+          text: "Cancel",
+        },
+        { text: "Ok" },
+      ]);
+    } else {
+      if (username.length >= 4 && username.length <= 10) {
+        if (validateEmail(email) == true) {
+          if (password.length >= 6) {
+            if (confirmPassword === password) {
+              try {
+                axios
+                  .post("http://10.0.2.2:8000/api/v1/users/register", data)
+                  .then(function (response) {
+                    // handle success
+                    console.log(JSON.stringify(response.data));
+                    // Alert.alert("Register Successfully");
+                  });
+                navigation.navigate("RegisterSuccessfulPage", {
+                  hearder: "false",
+                });
+              } catch (error) {
+                console.log(error.message);
+              }
+              setUsernameText("");
+              setEmailText("");
+              setPasswordText("");
+              setConfirmPasswordText("");
+            } else {
+              Alert.alert(
+                "Confirm Password Invaild!",
+                "Password and Confirm Password must be same!",
+                [
+                  {
+                    text: "Cancel",
+                  },
+                  { text: "Ok" },
+                ]
+              );
+            }
+          } else {
+            Alert.alert(
+              "Password Invaild!",
+              "Password must be more 5 Character!!",
+              [
+                {
+                  text: "Cancel",
+                },
+                { text: "Ok" },
+              ]
+            );
+          }
+        } else {
+          Alert.alert("Email Invaild!", "Email must be correct format!", [
+            {
+              text: "Cancel",
+            },
+            { text: "Ok" },
+          ]);
+        }
+      } else {
+        Alert.alert(
+          "Username Invaild!",
+          "Username must be longer than 3 Character and shorter than 11 Character!",
+          [
+            {
+              text: "Cancel",
+            },
+            { text: "Ok" },
+          ]
+        );
+      }
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.IconContainer}>
-        <Text style={styles.icon}>
+        <Text style={styles.icon} onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={24} color="black" />
         </Text>
       </View>
@@ -99,7 +175,15 @@ function RegisterPage(props) {
       <View style={styles.TitleContainer}>
         <Text style={styles.FooterTitle}>
           Already have an account?
-          <Text style={styles.FooterInnerTitle}> Login</Text>
+          <Text
+            style={styles.FooterInnerTitle}
+            onPress={() => {
+              navigation.navigate("LoginPage");
+            }}
+          >
+            {" "}
+            Login
+          </Text>
         </Text>
       </View>
     </SafeAreaView>

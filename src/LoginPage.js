@@ -1,13 +1,61 @@
-import React from "react";
-import { View, Text, SafeAreaView, StyleSheet, TextInput } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  Alert,
+} from "react-native";
 import MainButton from "./component/MainButton";
 import { AntDesign } from "@expo/vector-icons";
 
-function RegisterPage(props) {
+function RegisterPage({ navigation }) {
+  const [email, setEmailText] = React.useState("");
+  const [password, setPasswordText] = React.useState("");
+
+  // category random get request
+  const [user, setUser] = React.useState("");
+  useEffect(() => {
+    const getUser = async () => {
+      const userFromServer = await fetchUser();
+      setUser(userFromServer);
+    };
+    getUser();
+  }, []);
+
+  const fetchUser = async () => {
+    const res = await fetch("http://10.0.2.2:8000/api/v1/users");
+    const data = await res.json();
+    // console.log(data.data);
+    return data.data;
+  };
+
+  const login = () => {
+    if (email == "" || password == "") {
+      Alert.alert("Input Invaild!", "Data Cannot be Empty!", [
+        {
+          text: "Cancel",
+        },
+        { text: "Ok" },
+      ]);
+    } else {
+      if (email == email && password == password) {
+      } else {
+        Alert.alert("Data Invaild!", "Password or Email Invaild!", [
+          {
+            text: "Cancel",
+          },
+          { text: "Ok" },
+        ]);
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.IconContainer}>
-        <Text style={styles.icon}>
+        <Text style={styles.icon} onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={24} color="black" />
         </Text>
       </View>
@@ -22,11 +70,18 @@ function RegisterPage(props) {
           style={styles.input}
           placeholder="Email"
           keyboardType="default"
+          value={email}
+          textContentType="emailAddress"
+          onChangeText={(email) => setEmailText(email)}
         />
         <TextInput
           style={styles.input}
           placeholder="Password"
+          secureTextEntry={true}
           keyboardType="default"
+          value={password}
+          textContentType="password"
+          onChangeText={(password) => setPasswordText(password)}
         />
       </View>
 
@@ -38,7 +93,7 @@ function RegisterPage(props) {
       </View>
 
       <View style={styles.button}>
-        <MainButton title="Sign In" />
+        <MainButton title="Sign In" onPress={() => login()} />
       </View>
     </SafeAreaView>
   );

@@ -1,12 +1,25 @@
 import React from "react";
-import { View, Text, SafeAreaView, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import MainButton from "./component/MainButton";
 import SecondaryButton from "./component/SecondaryButton";
 import logo from "../assets/homeIcon.png";
-import HomePage from "./HomePage.js";
 
+function StartPage({ props, navigation }) {
+  const login = () => {
+    navigation.navigate("LoginPage");
+  };
 
-function StartPage(props, navigation) {
+  const register = () => {
+    navigation.navigate("RegisterPage");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.ImageContainer}>
@@ -17,8 +30,8 @@ function StartPage(props, navigation) {
         <Text style={styles.title}>Home Services</Text>
       </View>
       <View style={styles.button}>
-        <MainButton title="Sign In" />
-        <SecondaryButton title="Sign Up" />
+        <MainButton title="Sign In" onPress={() => login()} />
+        <SecondaryButton title="Sign Up" onPress={() => register()} />
       </View>
     </SafeAreaView>
   );
