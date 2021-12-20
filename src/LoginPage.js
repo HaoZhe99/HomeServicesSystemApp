@@ -9,26 +9,15 @@ import {
 } from "react-native";
 import MainButton from "./component/MainButton";
 import { AntDesign } from "@expo/vector-icons";
+import axios from "axios";
 
 function RegisterPage({ navigation }) {
   const [email, setEmailText] = React.useState("");
   const [password, setPasswordText] = React.useState("");
 
-  // category random get request
-  const [user, setUser] = React.useState("");
-  useEffect(() => {
-    const getUser = async () => {
-      const userFromServer = await fetchUser();
-      setUser(userFromServer);
-    };
-    getUser();
-  }, []);
-
-  const fetchUser = async () => {
-    const res = await fetch("http://10.0.2.2:8000/api/v1/users");
-    const data = await res.json();
-    // console.log(data.data);
-    return data.data;
+  const data = {
+    email: email,
+    password: password,
   };
 
   const login = () => {
@@ -40,14 +29,28 @@ function RegisterPage({ navigation }) {
         { text: "Ok" },
       ]);
     } else {
-      if (email == email && password == password) {
-      } else {
-        Alert.alert("Data Invaild!", "Password or Email Invaild!", [
-          {
-            text: "Cancel",
-          },
-          { text: "Ok" },
-        ]);
+      try {
+        axios
+          .post("http://10.0.2.2:8000/api/v1/users/login", data)
+          .then(function (response) {
+            // handle success
+            console.log(JSON.stringify(response.data));
+            if (JSON.stringify(response.data) == "false") {
+              Alert.alert("Data Invaild!", "Password or Email Invaild!", [
+                {
+                  text: "Cancel",
+                },
+                { text: "Ok" },
+              ]);
+            } else {
+              console.log("login successfully");
+              navigation.navigate("TabNav", {
+                hearder: "false",
+              });
+            }
+          });
+      } catch (error) {
+        console.log(error);
       }
     }
   };

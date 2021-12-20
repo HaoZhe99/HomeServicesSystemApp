@@ -20,7 +20,43 @@ import ServicerCompletedOrderPage from "./src/Servicer/ServicerCompletedOrderPag
 const Tab = createBottomTabNavigator();
 const NavStack = createNativeStackNavigator();
 
+function TabNav() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route, porps }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Homes") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Proflie") {
+            iconName = focused ? "ios-list-circle" : "ios-list-circle-outline";
+          } else if (route.name === "Settings") {
+            iconName = focused ? "ios-settings" : "ios-settings-outline";
+          } else if (route.name === "Order") {
+            iconName = focused ? "ios-receipt" : "ios-receipt-outline";
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "#009ca7",
+        tabBarInactiveTintColor: "black",
+        headerTitleAlign: "center",
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Homes" component={NavPage} />
+      <Tab.Screen name="Order" component={OrderNav} />
+      <Tab.Screen name="Settings" component={ServicerOldOrderNav} />
+      <Tab.Screen name="Proflie" component={ServicerNewOrderNav} />
+    </Tab.Navigator>
+  );
+}
+
 export default function App() {
+  const [isLogin, setIsLogin] = React.useState("false");
+
   return (
     <NavigationContainer>
       <NavStack.Navigator
@@ -31,45 +67,13 @@ export default function App() {
       >
         <NavStack.Screen name="StartPage" component={StartPage} />
         <NavStack.Screen name="RegisterPage" component={RegisterPage} />
-        <NavStack.Screen name="LoginPage" component={LoginPage} />
         <NavStack.Screen
           name="RegisterSuccessfulPage"
           component={RegisterSuccessfulPage}
         />
+        <NavStack.Screen name="LoginPage" component={LoginPage} />
+        <NavStack.Screen name="TabNav" component={TabNav} />
       </NavStack.Navigator>
     </NavigationContainer>
-    // <NavigationContainer>
-    //   <Tab.Navigator
-    //     screenOptions={({ route, porps }) => ({
-    //       tabBarIcon: ({ focused, color, size }) => {
-    //         let iconName;
-
-    //         if (route.name === "Homes") {
-    //           iconName = focused ? "home" : "home-outline";
-    //         } else if (route.name === "Proflie") {
-    //           iconName = focused
-    //             ? "ios-list-circle"
-    //             : "ios-list-circle-outline";
-    //         } else if (route.name === "Settings") {
-    //           iconName = focused ? "ios-settings" : "ios-settings-outline";
-    //         } else if (route.name === "Order") {
-    //           iconName = focused ? "ios-receipt" : "ios-receipt-outline";
-    //         }
-
-    //         // You can return any component that you like here!
-    //         return <Ionicons name={iconName} size={size} color={color} />;
-    //       },
-    //       tabBarActiveTintColor: "#009ca7",
-    //       tabBarInactiveTintColor: "black",
-    //       headerTitleAlign: "center",
-    //       headerShown: false,
-    //     })}
-    //   >
-    //     <Tab.Screen name="Homes" component={NavPage} />
-    //     <Tab.Screen name="Order" component={OrderNav} />
-    //     <Tab.Screen name="Settings" component={ServicerOldOrderNav} />
-    //     <Tab.Screen name="Proflie" component={ServicerNewOrderNav} />
-    //   </Tab.Navigator>
-    // </NavigationContainer>
   );
 }
