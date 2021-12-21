@@ -11,6 +11,7 @@ import MainButton from "./component/MainButton";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import { StackActions } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function RegisterPage({ navigation }) {
   const [email, setEmailText] = React.useState("");
@@ -57,6 +58,29 @@ function RegisterPage({ navigation }) {
     }
   };
 
+  const getUser = () => {
+    if (email == "" || password == "") {
+      Alert.alert("Input Invaild!", "Data Cannot be Empty!", [
+        {
+          text: "Cancel",
+        },
+        { text: "Ok" },
+      ]);
+    } else {
+      try {
+        axios
+          .post("http://10.0.2.2:8000/api/v1/users/checkUser", data)
+          .then(function (response) {
+            // handle success
+            // console.log(JSON.stringify(response.data));
+            storeData(response.data.data);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
@@ -64,6 +88,27 @@ function RegisterPage({ navigation }) {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("1");
+      // console.log(jsonValue);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  getData().then((T) => console.log(T));
+
+  const clearAll = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      // clear error
+    }
+
+    console.log("Done.");
   };
 
   return (
@@ -110,7 +155,15 @@ function RegisterPage({ navigation }) {
       </View>
 
       <View style={styles.button}>
-        <MainButton title="Sign In" onPress={() => login()} />
+        <MainButton
+          title="Sign In"
+          onPress={() => {
+            // login();
+            getUser();
+            // getData();
+            // clearAll();
+          }}
+        />
       </View>
     </SafeAreaView>
   );

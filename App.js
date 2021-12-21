@@ -16,6 +16,7 @@ import ServicerNewOrderNav from "./src/Nav/ServicerNewOrderNav";
 import ServicerOldOrderNav from "./src/Nav/ServicerOldOrderNav";
 import ServicerNewOrderPage from "./src/Servicer/ServicerNewOrderPage";
 import ServicerCompletedOrderPage from "./src/Servicer/ServicerCompletedOrderPage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 const NavStack = createNativeStackNavigator();
@@ -70,6 +71,17 @@ const StartStack = () => (
 
 export default function App({ route }) {
   const [isLogin, setIsLogin] = React.useState(false);
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("1");
+      // console.log(jsonValue);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e + "hi");
+    }
+  };
+  getData().then((T) => console.log(T));
   return (
     <NavigationContainer>
       {isLogin ? <HOmeNav /> : <StartStack />}
