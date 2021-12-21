@@ -57,7 +57,7 @@ function HomePage({ navigation }) {
   const fetchCategoryRandom = async () => {
     const res = await fetch("http://10.0.2.2:8000/api/v1/merchants/randomShow");
     const data = await res.json();
-    console.log(data.data);
+    // console.log(data.data);
     return data.data;
   };
 
@@ -92,7 +92,7 @@ function HomePage({ navigation }) {
               },
             ]}
             autoPlay={false}
-            onItemChanged={(item) => console.log("item", item)}
+            // onItemChanged={(item) => console.log("item", item)}
             closeIconColor="#fff"
             caroselImageStyle={{ height: 170 }}
           />

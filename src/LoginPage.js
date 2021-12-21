@@ -10,6 +10,7 @@ import {
 import MainButton from "./component/MainButton";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
+import { StackActions } from "@react-navigation/native";
 
 function RegisterPage({ navigation }) {
   const [email, setEmailText] = React.useState("");
@@ -44,9 +45,10 @@ function RegisterPage({ navigation }) {
               ]);
             } else {
               console.log("login successfully");
-              navigation.navigate("TabNav", {
-                hearder: "false",
-              });
+
+              // navigation.navigate("TabNav", {
+              //   hearder: "false",
+              // });
             }
           });
       } catch (error) {
@@ -55,10 +57,22 @@ function RegisterPage({ navigation }) {
     }
   };
 
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("1", jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.IconContainer}>
-        <Text style={styles.icon} onPress={() => navigation.goBack()}>
+        <Text
+          style={styles.icon}
+          onPress={() => navigation.dispatch(StackActions.popToTop())}
+        >
           <AntDesign name="arrowleft" size={24} color="black" />
         </Text>
       </View>

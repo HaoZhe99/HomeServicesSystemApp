@@ -111,7 +111,7 @@ function OrderViewPage({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.container}
+        style={styles.sv}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -323,8 +323,9 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     minWidth: "100%",
-    maxHeight: 135,
-    marginTop: 25,
+    maxHeight: 300,
+    paddingTop: 15,
+    paddingBottom: 10,
     textAlign: "center",
     alignItems: "center",
     justifyContent: "flex-start",

@@ -11,6 +11,7 @@ import MainButton from "./component/MainButton";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import RegisterSuccessfulPage from "./RegisterSuccessfulPage";
+import { StackActions } from "@react-navigation/native";
 
 function RegisterPage({ navigation }) {
   const [username, setUsernameText] = React.useState("");
@@ -120,7 +121,10 @@ function RegisterPage({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.IconContainer}>
-        <Text style={styles.icon} onPress={() => navigation.goBack()}>
+        <Text
+          style={styles.icon}
+          onPress={() => navigation.dispatch(StackActions.popToTop())}
+        >
           <AntDesign name="arrowleft" size={24} color="black" />
         </Text>
       </View>

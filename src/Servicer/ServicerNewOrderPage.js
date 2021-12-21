@@ -47,7 +47,6 @@ function ServicerNewOrderPage({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={styles.container}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -121,12 +120,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     justifyContent: "flex-start",
+    backgroundColor: "white",
   },
   cardContainer: {
     minWidth: "100%",
-    height: 100,
-    marginTop: 25,
-    marginBottom: 25,
+    maxHeight: 300,
+    paddingTop: 15,
+    paddingBottom: 10,
     textAlign: "center",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
-    elevation: 24,
+    elevation: 100,
     borderRadius: 10,
     width: "90%",
     height: 120,

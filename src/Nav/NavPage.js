@@ -7,18 +7,38 @@ import HomePage from "../HomePage";
 import OrderSuccefullyPage from "../order/OrderSuccefullyPage";
 import MerchantDetailPage from "../merchant/MerchantDetailPage";
 import PaymentPage from "../Payment/PaymentPage";
+import { StyleSheet, Text, Button, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import ServicerNewOrderPage from "../Servicer/ServicerNewOrderPage";
+import OrderNav from "./OrderNav";
 
 const NavStack = createNativeStackNavigator();
 
-function NavPage({ props }) {
+function NavPage({ navigation }) {
   return (
     <NavStack.Navigator
       screenOptions={{
         headerTitleAlign: "center",
-        headerShown: props,
       }}
     >
-      <NavStack.Screen name="Home" component={HomePage} />
+      <NavStack.Screen
+        name="Home"
+        component={HomePage}
+        options={{
+          headerRight: () => (
+            <TouchableOpacity
+              style={styles.hearder}
+              onPress={() => navigation.navigate("OrderNav")}
+            >
+              <Ionicons
+                name="person-circle-outline"
+                size={36}
+                color="#009ca7"
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
       <NavStack.Screen
         name="MerchantDetailPage"
         component={MerchantDetailPage}
@@ -32,8 +52,21 @@ function NavPage({ props }) {
         name="OrderSuccefullyPage"
         component={OrderSuccefullyPage}
       />
+      <NavStack.Screen
+        name="OrderNav"
+        component={OrderNav}
+        options={{
+          headerShown: false,
+        }}
+      />
     </NavStack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  hearder: {
+    marginRight: 10,
+  },
+});
 
 export default NavPage;
