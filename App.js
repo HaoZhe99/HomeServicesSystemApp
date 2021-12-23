@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Button } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
@@ -70,21 +70,29 @@ const StartStack = () => (
 );
 
 export default function App({ route }) {
-  const [isLogin, setIsLogin] = React.useState(false);
+  const [data, setData] = React.useState("false");
+  const [userId, setUserId] = React.useState("");
 
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("1");
-      // console.log(jsonValue);
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
+      return JSON.parse(jsonValue);
     } catch (e) {
-      console.log(e + "hi");
+      console.log(e);
     }
   };
-  getData().then((T) => console.log(T));
+
+  getData().then((T) => {
+    T == null ? setData("false") : setData("true");
+    T.id != null ? setUserId(T.id) : setUserId("");
+    // console.log(T.id);
+    // console.log(T);
+  });
+
+  // console.log(userId);
   return (
     <NavigationContainer>
-      {isLogin ? <HOmeNav /> : <StartStack />}
+      {data == "true" ? <HOmeNav /> : <StartStack />}
     </NavigationContainer>
   );
 }

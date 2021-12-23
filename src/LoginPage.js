@@ -99,7 +99,7 @@ function RegisterPage({ navigation }) {
       console.log(e);
     }
   };
-  getData().then((T) => console.log(T));
+  // getData().then((T) => console.log(T));
 
   const clearAll = async () => {
     try {
@@ -162,6 +162,8 @@ function RegisterPage({ navigation }) {
             getUser();
             // getData();
             // clearAll();
+            setRefreshing(true);
+            wait(500).then(() => setRefreshing(false));
           }}
         />
       </View>

@@ -12,6 +12,7 @@ import { TextInput } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import MainButton from "../component/MainButton";
 import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -24,6 +25,43 @@ function OrderFormPage({ navigation, route }) {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
+  // useEffect(() => {
+  //   setRefreshing(true);
+  //   wait(4000).then(() => setRefreshing(false));
+  // }, []);
+
+  const [userId, setUserId] = React.useState("");
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("1");
+      return JSON.parse(jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  getData().then((T) => {
+    T.id != null ? setUserId(T.id) : setUserId("");
+  });
+
+  const [users, setUser] = React.useState("");
+  useEffect(() => {
+    const getUser = async () => {
+      if (userId != "") {
+        const userFromServer = await fetchUser();
+        setUser(userFromServer);
+      }
+    };
+    getUser();
+  }, [refreshing, userId]);
+
+  const fetchUser = async () => {
+    const res = await fetch("http://10.0.2.2:8000/api/v1/users/" + userId);
+    const data = await res.json();
+    return data.data;
+  };
+  // console.log(users == null ? null : users.addresses);
 
   const [location, setLocation] = React.useState("");
   const [date, setDate] = useState(new Date());
@@ -103,7 +141,6 @@ function OrderFormPage({ navigation, route }) {
     const data = await res.json();
     return data.data;
   };
-  console.log(paymentMethods.length == 0 ? null : paymentMethods[0].name);
 
   const booking = () => {
     if (date.getHours().toString() < 10 || date.getHours().toString() >= 18) {
@@ -122,7 +159,6 @@ function OrderFormPage({ navigation, route }) {
           { text: "Ok" },
         ]);
       } else {
-        // console.log(pm);
         if (pm === 1) {
           navigation.navigate("orderConfirmPage", {
             date: d,
@@ -148,7 +184,7 @@ function OrderFormPage({ navigation, route }) {
     }
   };
 
-  // console.log(servicePackages[0] == undefined ? null : servicePackages[0].id);
+  // console.log(users.name);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -169,10 +205,17 @@ function OrderFormPage({ navigation, route }) {
                 onValueChange={(itemValue, itemIndex) => setLocation(itemValue)}
               >
                 <Picker.Item label="Select Location" value="" />
-                <Picker.Item
-                  label="No 5, Jln Impian Emas 2, Taman Impian Emas"
-                  value="No 5, Jln Impian Emas 2, Taman Impian Emas"
-                />
+                {users.addresses == undefined
+                  ? null
+                  : users.addresses.map((user, i) => {
+                      return (
+                        <Picker.Item
+                          label={user.address}
+                          value={user.address}
+                          key={i}
+                        />
+                      );
+                    })}
               </Picker>
             </View>
             <Text style={styles.text}>Package</Text>
