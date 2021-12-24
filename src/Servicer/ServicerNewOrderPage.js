@@ -12,6 +12,7 @@ import { Card, Paragraph } from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -27,10 +28,25 @@ function ServicerNewOrderPage({ navigation, route }) {
 
   const buttonStatus = "Incompleted";
 
+  const [servicerId, setServicerId] = React.useState("");
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("1");
+      return JSON.parse(jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  getData().then((T) => {
+    T.id != null ? setServicerId(T.id) : setServicerId("");
+  });
+
   //get orders
   const [orders, setOrder] = React.useState([]);
   useEffect(() => {
     const getOrder = async () => {
+      if (userId == "") return;
       const orderFromServer = await fetchOrder();
       setOrder(orderFromServer);
     };
@@ -38,7 +54,9 @@ function ServicerNewOrderPage({ navigation, route }) {
   }, [refreshing]);
 
   const fetchOrder = async () => {
-    const res = await fetch("http://10.0.2.2:8000/api/v1/orders/newOrder/1");
+    const res = await fetch(
+      "http://10.0.2.2:8000/api/v1/orders/newOrder/" + servicerId
+    );
     const data = await res.json();
     // console.log(data.data[0]);
     return data.data;

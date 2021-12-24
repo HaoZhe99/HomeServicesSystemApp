@@ -11,6 +11,7 @@ import { StyleSheet, Text, Button, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ServicerNewOrderPage from "../Servicer/ServicerNewOrderPage";
 import OrderNav from "./OrderNav";
+import ProfileMenu from "../UserProfile/ProfileMenu";
 
 const NavStack = createNativeStackNavigator();
 
@@ -28,7 +29,7 @@ function NavPage({ navigation }) {
           headerRight: () => (
             <TouchableOpacity
               style={styles.hearder}
-              onPress={() => navigation.navigate("OrderNav")}
+              onPress={() => navigation.navigate("ProfileMenu")}
             >
               <Ionicons
                 name="person-circle-outline"
@@ -59,6 +60,7 @@ function NavPage({ navigation }) {
           headerShown: false,
         }}
       />
+      <NavStack.Screen name="ProfileMenu" component={ProfileMenu} />
     </NavStack.Navigator>
   );
 }

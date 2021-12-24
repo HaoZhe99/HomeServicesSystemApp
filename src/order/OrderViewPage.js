@@ -16,6 +16,7 @@ import { Card, Paragraph, RadioButton, TextInput } from "react-native-paper";
 import logo from ".././../assets/homeIcon.png";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -32,20 +33,36 @@ function OrderViewPage({ navigation }) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  const [userId, setUserId] = React.useState("");
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("1");
+      return JSON.parse(jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  getData().then((T) => {
+    T.id != null ? setUserId(T.id) : setUserId("");
+  });
+
   //get orders
   const [orders, setOrder] = React.useState([]);
   useEffect(() => {
     const getOrder = async () => {
+      if (userId == "") return;
       const orderFromServer = await fetchOrder();
       setOrder(orderFromServer);
     };
     getOrder();
-  }, [refreshing]);
+  }, [refreshing, userId]);
 
   const fetchOrder = async () => {
-    const res = await fetch("http://10.0.2.2:8000/api/v1/orders");
+    const res = await fetch(
+      "http://10.0.2.2:8000/api/v1/orders/orderFilterByUser/" + userId
+    );
     const data = await res.json();
-    // console.log(data.data[0].date);
     return data.data;
   };
 
