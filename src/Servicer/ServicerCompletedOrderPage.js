@@ -46,12 +46,12 @@ function ServicerCompletedOrderPage({ navigation, route }) {
   const [orders, setOrder] = React.useState([]);
   useEffect(() => {
     const getOrder = async () => {
-      if (userId == "") return;
+      if (servicerId == "") return;
       const orderFromServer = await fetchOrder();
       setOrder(orderFromServer);
     };
     getOrder();
-  }, [refreshing]);
+  }, [refreshing, servicerId]);
 
   const fetchOrder = async () => {
     const res = await fetch(
@@ -61,6 +61,8 @@ function ServicerCompletedOrderPage({ navigation, route }) {
     console.log(data.data[0]);
     return data.data;
   };
+
+  console.log(servicerId);
 
   return (
     <SafeAreaView style={styles.container}>

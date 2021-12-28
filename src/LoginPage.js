@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,8 +12,21 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import { StackActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Auth } from "./component/Auth";
 
-function RegisterPage({ navigation }) {
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
+function LoginPage({ navigation, route }) {
+  const auth = useContext(Auth)
+  //   fresh page function
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   const [email, setEmailText] = React.useState("");
   const [password, setPasswordText] = React.useState("");
 
@@ -58,7 +71,7 @@ function RegisterPage({ navigation }) {
     }
   };
 
-  const getUser = () => {
+  const getUser = async () => {
     if (email == "" || password == "") {
       Alert.alert("Input Invaild!", "Data Cannot be Empty!", [
         {
@@ -68,7 +81,7 @@ function RegisterPage({ navigation }) {
       ]);
     } else {
       try {
-        axios
+        await axios
           .post("http://10.0.2.2:8000/api/v1/users/checkUser", data)
           .then(function (response) {
             // handle success
@@ -157,13 +170,15 @@ function RegisterPage({ navigation }) {
       <View style={styles.button}>
         <MainButton
           title="Sign In"
-          onPress={() => {
+          onPress={async () => {
             // login();
-            getUser();
+            await getUser();
+            auth("true");
             // getData();
             // clearAll();
-            setRefreshing(true);
-            wait(500).then(() => setRefreshing(false));
+            navigation.dispatch(StackActions.popToTop());
+            // setRefreshing(true);
+            // wait(500).then(() => setRefreshing(false));
           }}
         />
       </View>
@@ -234,4 +249,4 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-export default RegisterPage;
+export default LoginPage;

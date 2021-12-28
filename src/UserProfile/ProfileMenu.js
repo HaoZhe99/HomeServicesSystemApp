@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,18 +11,62 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Auth } from "../component/Auth";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-function ProfileMenu(props) {
+function ProfileMenu({ navigation, route }) {
+  const auth = useContext(Auth)
   //   fresh page function
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
+  const clearAll = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      // clear error
+    }
+
+    console.log("Done.");
+  };
+
+  const [userId, setUserId] = React.useState("");
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("1");
+      return JSON.parse(jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  getData().then((T) => {
+    T.id != null ? setUserId(T.id) : setUserId("");
+  });
+
+  const [users, setUser] = React.useState("");
+  useEffect(() => {
+    const getUser = async () => {
+      if (userId != "") {
+        const userFromServer = await fetchUser();
+        setUser(userFromServer);
+      }
+    };
+    getUser();
+  }, [refreshing, userId]);
+
+  const fetchUser = async () => {
+    const res = await fetch("http://10.0.2.2:8000/api/v1/users/" + userId);
+    const data = await res.json();
+    return data.data;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,9 +81,10 @@ function ProfileMenu(props) {
             <Text
               style={{
                 fontSize: 20,
+                paddingBottom: 5,
               }}
             >
-              Username
+              {users.name}
             </Text>
             <Text
               style={{
@@ -47,7 +92,7 @@ function ProfileMenu(props) {
               }}
               numberOfLines={1}
             >
-              example@gmail.com
+              {users.email}
             </Text>
           </View>
           <View style={styles.contentListContanier}>
@@ -78,7 +123,16 @@ function ProfileMenu(props) {
               />
               <Text>Settings</Text>
             </View>
-            <View style={styles.contentList}>
+            <TouchableOpacity
+              style={styles.contentList}
+              onPress={async () => {
+                await clearAll();
+
+                auth("false");
+                // setRefreshing(true);
+                // wait(2000).then(() => setRefreshing(false));
+              }}
+            >
               <SimpleLineIcons
                 name="logout"
                 size={24}
@@ -86,7 +140,7 @@ function ProfileMenu(props) {
                 style={{ paddingRight: 10, paddingBottom: 5 }}
               />
               <Text>Log Out</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -103,7 +157,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     margin: 50,
-    padding: 60,
+    padding: 80,
     borderRadius: 10,
     backgroundColor: "#FFFFFF",
     shadowColor: "#009ca7",

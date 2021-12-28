@@ -123,7 +123,7 @@ function OrderViewPage({ navigation }) {
     ]);
   };
 
-  // console.log(comment);
+  console.log(userId);
 
   return (
     <SafeAreaView style={styles.container}>

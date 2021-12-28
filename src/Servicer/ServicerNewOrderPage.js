@@ -46,12 +46,12 @@ function ServicerNewOrderPage({ navigation, route }) {
   const [orders, setOrder] = React.useState([]);
   useEffect(() => {
     const getOrder = async () => {
-      if (userId == "") return;
+      if (servicerId == "") return;
       const orderFromServer = await fetchOrder();
       setOrder(orderFromServer);
     };
     getOrder();
-  }, [refreshing]);
+  }, [refreshing, servicerId]);
 
   const fetchOrder = async () => {
     const res = await fetch(
@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: "white",
   },
   cardContainer: {
     minWidth: "100%",
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
-    elevation: 100,
+    elevation: 24,
     borderRadius: 10,
     width: "90%",
     height: 120,

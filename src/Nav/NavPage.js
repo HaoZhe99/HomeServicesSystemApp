@@ -22,24 +22,7 @@ function NavPage({ navigation }) {
         headerTitleAlign: "center",
       }}
     >
-      <NavStack.Screen
-        name="Home"
-        component={HomePage}
-        options={{
-          headerRight: () => (
-            <TouchableOpacity
-              style={styles.hearder}
-              onPress={() => navigation.navigate("ProfileMenu")}
-            >
-              <Ionicons
-                name="person-circle-outline"
-                size={36}
-                color="#009ca7"
-              />
-            </TouchableOpacity>
-          ),
-        }}
-      />
+      <NavStack.Screen name="Home" component={HomePage} />
       <NavStack.Screen
         name="MerchantDetailPage"
         component={MerchantDetailPage}
@@ -60,7 +43,6 @@ function NavPage({ navigation }) {
           headerShown: false,
         }}
       />
-      <NavStack.Screen name="ProfileMenu" component={ProfileMenu} />
     </NavStack.Navigator>
   );
 }
