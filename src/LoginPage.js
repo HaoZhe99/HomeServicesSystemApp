@@ -177,8 +177,6 @@ function LoginPage({ navigation, route }) {
             // getData();
             // clearAll();
             navigation.dispatch(StackActions.popToTop());
-            // setRefreshing(true);
-            // wait(500).then(() => setRefreshing(false));
           }}
         />
       </View>

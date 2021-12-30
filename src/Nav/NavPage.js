@@ -7,11 +7,8 @@ import HomePage from "../HomePage";
 import OrderSuccefullyPage from "../order/OrderSuccefullyPage";
 import MerchantDetailPage from "../merchant/MerchantDetailPage";
 import PaymentPage from "../Payment/PaymentPage";
-import { StyleSheet, Text, Button, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import ServicerNewOrderPage from "../Servicer/ServicerNewOrderPage";
+import { StyleSheet } from "react-native";
 import OrderNav from "./OrderNav";
-import ProfileMenu from "../UserProfile/ProfileMenu";
 
 const NavStack = createNativeStackNavigator();
 

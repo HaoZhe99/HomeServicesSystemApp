@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   StyleSheet,
   Image,
-  TouchableOpacity,
 } from "react-native";
 import MainButton from "./component/MainButton";
 import SecondaryButton from "./component/SecondaryButton";

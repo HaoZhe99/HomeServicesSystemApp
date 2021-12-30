@@ -8,7 +8,7 @@ import {
   RefreshControl,
   TouchableOpacity,
 } from "react-native";
-import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
+import { Card, Paragraph } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
 import MainButton from "../component/MainButton";
 

@@ -10,7 +10,6 @@ import {
 import MainButton from "./component/MainButton";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
-import RegisterSuccessfulPage from "./RegisterSuccessfulPage";
 import { StackActions } from "@react-navigation/native";
 
 function RegisterPage({ navigation }) {

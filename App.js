@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Button } from "react-native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import HomePage from "./src/HomePage";
 import StartPage from "./src/StartPage";
 import RegisterPage from "./src/RegisterPage";
 import LoginPage from "./src/LoginPage";
@@ -14,12 +12,9 @@ import NavPage from "./src/Nav/NavPage";
 import OrderNav from "./src/Nav/OrderNav";
 import ServicerNewOrderNav from "./src/Nav/ServicerNewOrderNav";
 import ServicerOldOrderNav from "./src/Nav/ServicerOldOrderNav";
-import ServicerNewOrderPage from "./src/Servicer/ServicerNewOrderPage";
-import ServicerCompletedOrderPage from "./src/Servicer/ServicerCompletedOrderPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProfileMenu from "./src/UserProfile/ProfileMenu";
 import { Auth } from "./src/component/Auth";
-// import { Auth } from "./src/component/Auth";
 
 const Tab = createBottomTabNavigator();
 const NavStack = createNativeStackNavigator();
@@ -155,8 +150,6 @@ export default function App({ route }) {
   return (
     <Auth.Provider value={setData}>
       <NavigationContainer>
-        {/* <HOmeNav /> */}
-        {/* {data == "true" ? <HOmeNav /> : <StartStack />} */}
         {data == "true" ? (
           roleId == "4" ? (
             <ServicerNav />

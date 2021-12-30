@@ -12,6 +12,12 @@ import {
 import { Searchbar, Card, Title, Paragraph } from "react-native-paper";
 import logo from "../assets/homeIcon.png";
 import { ImageSlider } from "react-native-image-slider-banner";
+import r from "../assets/category_icons/Repair.png";
+import p from "../assets/category_icons/PlumbingRepair.png";
+import e from "../assets/category_icons/Electrical.png";
+import a from "../assets/category_icons/AirconRepair.png";
+import c from "../assets/category_icons/Cleaning.png";
+import l from "../assets/category_icons/Lightwiring.png";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -59,6 +65,24 @@ function HomePage({ navigation }) {
     const data = await res.json();
     // console.log(data.data);
     return data.data;
+  };
+
+  const imageCategory = (category) => {
+    if (category == "Repair") {
+      return <Image source={r} style={{ width: 50, height: 50 }} />;
+    } else if (category == "Cleaning") {
+      return <Image source={c} style={{ width: 50, height: 50 }} />;
+    } else if (category == "Aircon Repair") {
+      return <Image source={a} style={{ width: 50, height: 50 }} />;
+    } else if (category == "Light & wiring") {
+      return <Image source={l} style={{ width: 50, height: 50 }} />;
+    } else if (category == "Plumbing Repair") {
+      return <Image source={p} style={{ width: 50, height: 50 }} />;
+    } else if (category == "Electrical") {
+      return <Image source={e} style={{ width: 50, height: 50 }} />;
+    } else {
+      return <Image source={logo} style={{ width: 50, height: 50 }} />;
+    }
   };
 
   return (
@@ -113,7 +137,7 @@ function HomePage({ navigation }) {
                 >
                   <Card.Content>
                     <View style={styles.ImageContainer}>
-                      <Image source={logo} style={{ width: 50, height: 50 }} />
+                      {imageCategory(category.name)}
                     </View>
                     <Title
                       key="{index}"
@@ -137,7 +161,10 @@ function HomePage({ navigation }) {
             })
           }
         >
-          <Image source={logo} style={{ width: 120, height: 120 }} />
+          <Image
+            source={require("../assets/homeIcon.png")}
+            style={{ width: 120, height: 120 }}
+          />
           <View style={styles.companyDetailsText}>
             <Paragraph style={styles.paragraph} numberOfLines={1}>
               {categoryRandom.name}

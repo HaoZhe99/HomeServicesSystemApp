@@ -7,6 +7,7 @@ import {
   ScrollView,
   RefreshControl,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Card, Paragraph } from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
@@ -39,7 +40,15 @@ function ServicerNewOrderPage({ navigation, route }) {
   };
 
   getData().then((T) => {
-    T.id != null ? setServicerId(T.id) : setServicerId("");
+    if (T == null) {
+      Alert.alert("Input Invaild!", "Email or Password Invalid!", [
+        {
+          text: "Ok",
+        },
+      ]);
+    } else {
+      T.id != null ? setServicerId(T.id) : setServicerId("");
+    }
   });
 
   //get orders
