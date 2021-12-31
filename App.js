@@ -13,7 +13,7 @@ import OrderNav from "./src/Nav/OrderNav";
 import ServicerNewOrderNav from "./src/Nav/ServicerNewOrderNav";
 import ServicerOldOrderNav from "./src/Nav/ServicerOldOrderNav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import ProfileMenu from "./src/UserProfile/ProfileMenu";
+import ProfileNav from "./src/Nav/ProfileNav";
 import { Auth } from "./src/component/Auth";
 
 const Tab = createBottomTabNavigator();
@@ -80,8 +80,7 @@ export default function App({ route }) {
       <Tab.Screen name="History" component={OrderNav} />
       <Tab.Screen
         name="Profile"
-        component={ProfileMenu}
-        options={{ headerShown: true }}
+        component={ProfileNav}
         initialParams={{ setData: setData }}
       />
     </Tab.Navigator>
@@ -113,11 +112,7 @@ export default function App({ route }) {
     >
       <Tab.Screen name="Incomplete Order" component={ServicerNewOrderNav} />
       <Tab.Screen name="Completed Order" component={ServicerOldOrderNav} />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileMenu}
-        options={{ headerShown: true }}
-      />
+      <Tab.Screen name="Profile" component={ProfileNav} />
     </Tab.Navigator>
   );
 

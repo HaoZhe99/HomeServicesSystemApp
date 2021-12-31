@@ -103,7 +103,7 @@ function OrderViewPage({ navigation }) {
         )
         .then(function (response) {
           // handle success
-          console.log(JSON.stringify(response.data));
+          // console.log(JSON.stringify(response.data));
         });
       navigation.navigate("CommentSuccessfullyPage", {
         hearder: "false",
@@ -122,8 +122,6 @@ function OrderViewPage({ navigation }) {
       },
     ]);
   };
-
-  console.log(userId);
 
   return (
     <SafeAreaView style={styles.container}>

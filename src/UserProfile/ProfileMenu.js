@@ -19,7 +19,7 @@ const wait = (timeout) => {
 };
 
 function ProfileMenu({ navigation, route }) {
-  const auth = useContext(Auth)
+  const auth = useContext(Auth);
   //   fresh page function
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -96,7 +96,10 @@ function ProfileMenu({ navigation, route }) {
             </Text>
           </View>
           <View style={styles.contentListContanier}>
-            <View style={styles.contentList}>
+            <TouchableOpacity
+              style={styles.contentList}
+              onPress={() => navigation.navigate("My Account")}
+            >
               <Ionicons
                 name="person-outline"
                 size={24}
@@ -104,8 +107,11 @@ function ProfileMenu({ navigation, route }) {
                 style={{ paddingRight: 10, paddingBottom: 5 }}
               />
               <Text>My Account</Text>
-            </View>
-            <View style={styles.contentList}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.contentList}
+              onPress={() => navigation.navigate("Order History")}
+            >
               <MaterialCommunityIcons
                 name="history"
                 size={24}
@@ -113,7 +119,7 @@ function ProfileMenu({ navigation, route }) {
                 style={{ paddingRight: 10, paddingBottom: 5 }}
               />
               <Text>History</Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.contentList}>
               <Ionicons
                 name="md-settings-outline"

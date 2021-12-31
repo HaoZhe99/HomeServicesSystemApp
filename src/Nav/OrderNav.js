@@ -12,7 +12,7 @@ function OrderNav() {
         headerTitleAlign: "center",
       }}
     >
-      <NavStack.Screen name="OrderView" component={OrderViewPage} />
+      <NavStack.Screen name="Order History" component={OrderViewPage} />
       <NavStack.Screen
         name="CommentSuccessfullyPage"
         component={CommentSuccessfullyPage}
