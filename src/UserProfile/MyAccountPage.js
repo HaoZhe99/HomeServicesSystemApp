@@ -37,7 +37,10 @@ function MyAccountPage({ navigation, route }) {
         <View style={styles.cardContainer}>
           <Card style={styles.cardContent}>
             <Card.Content>
-              <View style={styles.row}>
+              <TouchableOpacity
+                style={styles.row}
+                onPress={() => navigation.navigate("ProfilePage")}
+              >
                 <View style={styles.firstIcon}>
                   <Ionicons name="person" size={30} color="black" />
                 </View>
@@ -47,12 +50,15 @@ function MyAccountPage({ navigation, route }) {
                 <View style={styles.secondIcon}>
                   <AntDesign name="edit" size={25} color="black" />
                 </View>
-              </View>
+              </TouchableOpacity>
             </Card.Content>
           </Card>
           <Card style={styles.cardContent}>
             <Card.Content>
-              <View style={styles.row}>
+              <TouchableOpacity
+                style={styles.row}
+                onPress={() => navigation.navigate("AddAddressPage")}
+              >
                 <View style={styles.firstIcon}>
                   <Entypo name="location" size={30} color="black" />
                 </View>
@@ -62,12 +68,15 @@ function MyAccountPage({ navigation, route }) {
                 <View style={styles.secondIcon}>
                   <AntDesign name="edit" size={25} color="black" />
                 </View>
-              </View>
+              </TouchableOpacity>
             </Card.Content>
           </Card>
           <Card style={styles.cardContent}>
             <Card.Content>
-              <View style={styles.row}>
+              <TouchableOpacity
+                style={styles.row}
+                onPress={() => navigation.navigate("AddPMPage")}
+              >
                 <View style={styles.firstIcon}>
                   <AntDesign name="creditcard" size={30} color="black" />
                 </View>
@@ -77,7 +86,7 @@ function MyAccountPage({ navigation, route }) {
                 <View style={styles.secondIcon}>
                   <AntDesign name="edit" size={25} color="black" />
                 </View>
-              </View>
+              </TouchableOpacity>
             </Card.Content>
           </Card>
         </View>
@@ -92,6 +101,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "white",
   },
   cardContainer: {
     minWidth: "100%",
