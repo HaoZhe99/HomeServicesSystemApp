@@ -7,6 +7,8 @@ import AddPMPage from "../UserProfile/AddPMPage";
 import MyAccountPage from "../UserProfile/MyAccountPage";
 import UpadateSuccessFulPage from "../UserProfile/UpadateSuccessFulPage";
 import OrderViewPage from "../order/OrderViewPage";
+import AddAddressFormPage from "../UserProfile/AddAddressFormPage";
+import UpdateAddressFormPage from "../UserProfile/UpdateAddressFormPage";
 
 const NavStack = createNativeStackNavigator();
 
@@ -23,6 +25,8 @@ function ProfileNav() {
       <NavStack.Screen name="AddPMPage" component={AddPMPage} />
       <NavStack.Screen name="My Account" component={MyAccountPage} />
       <NavStack.Screen name="Order History" component={OrderViewPage} />
+      <NavStack.Screen name="AddAddressFormPage" component={AddAddressFormPage} />
+      <NavStack.Screen name="UpdateAddressFormPage" component={UpdateAddressFormPage} />
       <NavStack.Screen
         name="UpadateSuccessFulPage"
         component={UpadateSuccessFulPage}

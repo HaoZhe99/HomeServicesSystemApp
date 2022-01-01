@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "flex-start",
     justifyContent: "center",
-    width: "66%",
+    width: "70%",
   },
   secondIcon: {
     width: "16%",
