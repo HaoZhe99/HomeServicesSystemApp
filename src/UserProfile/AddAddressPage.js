@@ -87,7 +87,7 @@ function AddAddressPage({ navigation, route }) {
                         }
                       >
                         <View style={styles.firstIcon}>
-                          <Entypo name="location" size={30} color="black" />
+                          <Entypo name="location-pin" size={30} color="black" />
                         </View>
                         <View style={styles.text}>
                           <Paragraph>{user.address}</Paragraph>
@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white",
   },
-
   textInputContainer: {
     paddingLeft: 30,
     paddingRight: 30,

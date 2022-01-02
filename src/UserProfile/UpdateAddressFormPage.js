@@ -123,8 +123,6 @@ function UpdateAddressFormPage({ navigation, route }) {
   //     return data.data;
   //   };
 
-  console.log(route.params.address.id);
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -191,7 +189,7 @@ function UpdateAddressFormPage({ navigation, route }) {
             </View>
           </View>
           <View style={styles.button}>
-            <MainButton title="Add Address" onPress={() => updateProfile()} />
+            <MainButton title="Save Address" onPress={() => updateProfile()} />
           </View>
         </View>
       </ScrollView>
