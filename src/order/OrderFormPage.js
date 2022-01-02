@@ -13,6 +13,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import MainButton from "../component/MainButton";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { AntDesign } from "@expo/vector-icons";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -77,18 +79,22 @@ function OrderFormPage({ navigation, route }) {
   const d =
     date.getFullYear().toString() +
     "-" +
-    (date.getMonth() + 1).toString() +
+    ((date.getMonth() + 1).toString() >= 10
+      ? (date.getMonth() + 1).toString()
+      : ("0" + date.getMonth() + 1).toString().substring(1, 3)) +
     "-" +
-    date.getDate().toString();
+    (date.getDate().toString() >= 10
+      ? date.getDate().toString()
+      : "0" + date.getDate().toString());
 
-  const t =
-    (date.getHours().toString() >= 0 && date.getHours().toString() < 10
-      ? "0" + date.getHours().toString()
-      : date.getHours().toString()) +
-    ":" +
-    (date.getMinutes().toString() >= 0 && date.getMinutes().toString() < 10
-      ? "0" + date.getMinutes().toString()
-      : date.getMinutes().toString());
+  // const t =
+  //   (date.getHours().toString() >= 0 && date.getHours().toString() < 10
+  //     ? "0" + date.getHours().toString()
+  //     : date.getHours().toString()) +
+  //   ":" +
+  //   (date.getMinutes().toString() >= 0 && date.getMinutes().toString() < 10
+  //     ? "0" + date.getMinutes().toString()
+  //     : date.getMinutes().toString());
 
   const showMode = (currentMode) => {
     setShow(true);
@@ -142,8 +148,19 @@ function OrderFormPage({ navigation, route }) {
     return data.data;
   };
 
+  const [time, setTime] = useState("");
+
+  const data1 = {
+    date: d,
+    time: time,
+    merchant_id: route.params.merchant_id,
+    package_id: p,
+    status: "pending",
+    user_id: userId,
+  };
+
   const booking = () => {
-    if (date.getHours().toString() < 10 || date.getHours().toString() >= 18) {
+    if (date.getHours() + 8 < 10 || date.getHours() + 8 >= 19) {
       Alert.alert("Time Invaild!", "Selected Time not Under Service Time!", [
         {
           text: "Cancel",
@@ -151,7 +168,7 @@ function OrderFormPage({ navigation, route }) {
         { text: "Ok" },
       ]);
     } else {
-      if (d == null || t == null || location == "" || p == "" || pm == "") {
+      if (d == null || time == "" || location == "" || p == "") {
         Alert.alert("Input Invaild!", "Data Cannot be Empty!", [
           {
             text: "Cancel",
@@ -159,32 +176,45 @@ function OrderFormPage({ navigation, route }) {
           { text: "Ok" },
         ]);
       } else {
-        if (pm === 1) {
-          navigation.navigate("orderConfirmPage", {
-            date: d,
-            time: t,
-            payment_method: pm,
-            location: location,
-            package: p,
-            merchant_id: route.params.merchant_id,
-            merchant_name: route.params.merchant_name,
+        try {
+          axios
+            .post("http://10.0.2.2:8000/api/v1/orders", data1)
+            .then(function (response) {
+              // handle success
+              console.log(JSON.stringify(response.data));
+            });
+          navigation.navigate("OrderSuccefullyPage", {
+            hearder: "false",
           });
-        } else {
-          navigation.navigate("PaymentPage", {
-            date: d,
-            time: t,
-            payment_method: pm,
-            location: location,
-            package: p,
-            merchant_id: route.params.merchant_id,
-            merchant_name: route.params.merchant_name,
-          });
+        } catch (error) {
+          console.log(error.message);
         }
+        // if (pm === 1) {
+        //   navigation.navigate("orderConfirmPage", {
+        //     date: d,
+        //     time: t,
+        //     payment_method: pm,
+        //     location: location,
+        //     package: p,
+        //     merchant_id: route.params.merchant_id,
+        //     merchant_name: route.params.merchant_name,
+        //   });
+        // } else {
+        //   navigation.navigate("PaymentPage", {
+        //     date: d,
+        //     time: t,
+        //     payment_method: pm,
+        //     location: location,
+        //     package: p,
+        //     merchant_id: route.params.merchant_id,
+        //     merchant_name: route.params.merchant_name,
+        //   });
+        // }
       }
     }
   };
 
-  // console.log(users.name);
+  console.log(new Date().getHours() + 8 > time ? "false" : "true");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -231,7 +261,7 @@ function OrderFormPage({ navigation, route }) {
                   : servicePackages.map((pacakage, i) => {
                       return (
                         <Picker.Item
-                          label={pacakage.name}
+                          label={pacakage.name + " — RM " + pacakage.price}
                           value={pacakage.id}
                           key={i}
                         />
@@ -269,7 +299,7 @@ function OrderFormPage({ navigation, route }) {
                 right={<TextInput.Icon name="calendar" />}
                 onFocus={showDatepicker}
               />
-              <TextInput
+              {/* <TextInput
                 value={
                   (date.getHours().toString() >= 0 &&
                   date.getHours().toString() < 10
@@ -289,10 +319,37 @@ function OrderFormPage({ navigation, route }) {
                 right={<TextInput.Icon name="clock" />}
                 onChangeText={(date) => setDate(date)}
                 onFocus={showTimepicker}
-              />
+              /> */}
+
+              <View style={styles.timeInput}>
+                <Text style={styles.timeText}>Time</Text>
+
+                <Picker
+                  style={styles.timePicker}
+                  selectedValue={time}
+                  onValueChange={(itemValue, itemIndex) => setTime(itemValue)}
+                >
+                  <Picker.Item label="Time" value="" />
+                  <Picker.Item label="10:00" value={10} />
+                  <Picker.Item label="11:00" value={11} />
+                  <Picker.Item label="12:00" value={12} />
+                  <Picker.Item label="13:00" value={13} />
+                  <Picker.Item label="14:00" value={14} />
+                  <Picker.Item label="15:00" value={15} />
+                  <Picker.Item label="16:00" value={16} />
+                  <Picker.Item label="17:00" value={17} />
+                  <Picker.Item label="18:00" value={18} />
+                </Picker>
+                <AntDesign
+                  name="clockcircle"
+                  size={20}
+                  color="black"
+                  style={styles.timeIcon}
+                />
+              </View>
             </View>
 
-            <Text style={styles.text}>Payment Method</Text>
+            {/* <Text style={styles.text}>Payment Method</Text>
             <View style={styles.picker}>
               <Picker
                 style={styles.pickerInner}
@@ -312,7 +369,7 @@ function OrderFormPage({ navigation, route }) {
                       );
                     })}
               </Picker>
-            </View>
+            </View> */}
 
             <View style={styles.button}>
               <MainButton title="Booking" onPress={() => booking()} />
@@ -366,21 +423,40 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#009ca7",
   },
+  timeText: {
+    width: 35,
+    height: 20,
+    left: 10,
+    bottom: 8,
+    fontSize: 12,
+    color: "gray",
+    backgroundColor: "white",
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  timeIcon: {
+    bottom: 53,
+    left: 120,
+  },
   dateAndTimeContainer: {
     flexDirection: "row",
     paddingBottom: 15,
   },
   dateInput: {
-    width: 200,
     width: "40%",
     paddingRight: 5,
     paddingBottom: 5,
+    backgroundColor: "white",
   },
   timeInput: {
-    width: 200,
     width: "40%",
-    paddingLeft: 5,
-    paddingBottom: 5,
+    height: 58,
+    borderColor: "#009ca7",
+    borderRadius: 4,
+    borderWidth: 1.2,
+    marginTop: 6,
+    backgroundColor: "white",
   },
   picker: {
     width: "80%",
@@ -388,11 +464,15 @@ const styles = StyleSheet.create({
     borderColor: "#a6a6a6",
     borderRadius: 5,
     borderWidth: 1.5,
-    backgroundColor: "#f6f6f6",
+    backgroundColor: "white",
     marginBottom: 20,
   },
   pickerInner: {
     top: -5,
+    left: 5,
+  },
+  timePicker: {
+    top: -16,
     left: 5,
   },
   button: {
