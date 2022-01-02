@@ -7,6 +7,7 @@ import {
   ScrollView,
   RefreshControl,
   Image,
+  Alert,
 } from "react-native";
 import { TextInput, Checkbox } from "react-native-paper";
 import MainButton from "../component/MainButton";
@@ -14,6 +15,7 @@ import { AntDesign } from "@expo/vector-icons";
 import card from "../../assets/card.jpg";
 import { Picker } from "@react-native-picker/picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import axios from "axios";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -35,33 +37,72 @@ function PaymentPage({ navigation, route }) {
   const [checked, setChecked] = React.useState(false);
 
   const payment = () => {
-    if (checked == true) {
-      navigation.navigate("orderConfirmPage", {
-        date: route.params.date,
-        time: route.params.time,
-        payment_method: route.params.payment_method,
-        location: route.params.location,
-        package: route.params.package,
-        merchant_id: route.params.merchant_id,
-        merchant_name: route.params.merchant_name,
-        bank_of_card: bank,
-        name_of_card: nameOfCard,
-        card_number: cardNumber,
-        expired_date: dueDate,
-        cvv: cvv,
-      });
+    if (
+      bank == "" ||
+      nameOfCard == "" ||
+      cardNumber == "" ||
+      dueDate == "" ||
+      cvv == ""
+    ) {
+      Alert.alert("Input Invaild!", "Data Cannot be Empty!", [
+        {
+          text: "Cancel",
+        },
+        { text: "Ok" },
+      ]);
     } else {
-      navigation.navigate("orderConfirmPage", {
-        date: route.params.date,
-        time: route.params.time,
-        payment_method: route.params.payment_method,
-        location: route.params.location,
-        package: route.params.package,
-        merchant_id: route.params.merchant_id,
-        merchant_name: route.params.merchant_name,
-      });
+      if (checked == true) {
+        try {
+          axios
+            .post(
+              "http://10.0.2.2:8000/api/v1/orders/orderConfirm/" +
+                route.params.order,
+              {
+                status: "incomplete",
+                payment_method_id: route.params.pm,
+                bank_of_card: bank,
+                name_of_card: nameOfCard,
+                card_number: cardNumber,
+                expired_date: dueDate,
+                cvv: cvv,
+              }
+            )
+            .then(function (response) {
+              // handle success
+              console.log(JSON.stringify(response.data));
+            });
+          navigation.navigate("OrderSuccefullyPage", {
+            hearder: "false",
+          });
+        } catch (error) {
+          console.log(error.message);
+        }
+      } else {
+        try {
+          axios
+            .post(
+              "http://10.0.2.2:8000/api/v1/orders/orderConfirm/" +
+                route.params.order,
+              {
+                status: "incomplete",
+                payment_method_id: route.params.pm,
+              }
+            )
+            .then(function (response) {
+              // handle success
+              console.log(JSON.stringify(response.data));
+            });
+          navigation.navigate("OrderSuccefullyPage", {
+            hearder: "false",
+          });
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
     }
   };
+
+  console.log(route.params);
 
   return (
     <SafeAreaView style={styles.container}>

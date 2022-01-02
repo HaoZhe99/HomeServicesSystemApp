@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import MainButton from "../component/MainButton";
 import axios from "axios";
+import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function orderConfirmPage({ navigation, route }) {
   const wait = (timeout) => {
@@ -27,28 +29,79 @@ function orderConfirmPage({ navigation, route }) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const data1 = {
-    date: route.params.date,
-    time: route.params.time,
-    merchant_id: route.params.merchant_id,
-    package_id: route.params.package,
-    status: "incomplete",
-    price: "99",
-    user_id: 4,
+  const [userId, setUserId] = React.useState("");
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("1");
+      return JSON.parse(jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
   };
-  const data2 = {
-    bank_of_card: route.params.bank_of_card,
-    name_of_card: route.params.name_of_card,
-    expired_date: route.params.expired_date,
-    cvv: route.params.cvv,
-    card_number: route.params.card_number,
+
+  getData().then((T) => {
+    T.id != null ? setUserId(T.id) : setUserId("");
+  });
+
+  const [orderDetail, setOrderDetail] = React.useState("");
+  useEffect(() => {
+    const getOrderDetail = async () => {
+      const orderDetailFromServer = await fetchOrderDetil();
+      setOrderDetail(orderDetailFromServer);
+    };
+    getOrderDetail();
+  }, [refreshing]);
+
+  const fetchOrderDetil = async () => {
+    const res = await fetch(
+      "http://10.0.2.2:8000/api/v1/orders/" + route.params.order_id
+    );
+    const data = await res.json();
+    // console.log(data.data.merchant.name);
+    return data.data;
+  };
+
+  const [pm, setPm] = React.useState([]);
+
+  // get payment method
+  const [paymentMethods, setPaymentMethods] = React.useState([]);
+  useEffect(() => {
+    const getPaymentMethods = async () => {
+      const paymentMethodFromServer = await fetchPaymentMethods();
+      setPaymentMethods(paymentMethodFromServer);
+    };
+    getPaymentMethods();
+  }, []);
+
+  const fetchPaymentMethods = async () => {
+    const res = await fetch("http://10.0.2.2:8000/api/v1/payment-methods");
+    const data = await res.json();
+    return data.data;
+  };
+
+  const data1 = {
+    date: orderDetail.date,
+    time: orderDetail.time,
+    merchant_id:
+      orderDetail.merchant == undefined ? null : orderDetail.merchant.id,
+    package_id:
+      orderDetail.package == undefined ? null : orderDetail.package.id,
+    status: "incomplete",
+    price: orderDetail.price,
+    user_id: userId,
   };
 
   const orderDone = () => {
-    if (route.params.bank_of_card == null || route.params.bank_of_card == "") {
+    if (pm == 1 || pm == "1") {
       try {
         axios
-          .post("http://10.0.2.2:8000/api/v1/orders", data1)
+          .post(
+            "http://10.0.2.2:8000/api/v1/orders/orderConfirm/" + orderDetail.id,
+            {
+              status: "incomplete",
+              payment_method_id: pm,
+            }
+          )
           .then(function (response) {
             // handle success
             console.log(JSON.stringify(response.data));
@@ -60,35 +113,11 @@ function orderConfirmPage({ navigation, route }) {
         console.log(error.message);
       }
     } else {
-      try {
-        axios
-          .post("http://10.0.2.2:8000/api/v1/orders", data1)
-          .then(function (response) {
-            // handle success
-            console.log(JSON.stringify(response.data));
-          });
-        navigation.navigate("OrderSuccefullyPage", {
-          hearder: "false",
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
-
-      try {
-        axios
-          .post("http://10.0.2.2:8000/api/v1/cards", data2)
-          .then(function (response) {
-            // handle success
-            console.log(JSON.stringify(response.data));
-          });
-        navigation.navigate("OrderSuccefullyPage", {
-          hearder: "false",
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
+      navigation.navigate("PaymentPage", { pm: pm, order: orderDetail.id });
     }
   };
+
+  console.log(orderDetail.id);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,17 +138,19 @@ function orderConfirmPage({ navigation, route }) {
                     <View style={styles.textInner}>
                       <Entypo name="shop" size={16} color="black" />
                       <Text style={styles.text}>
-                        {route.params.merchant_name}
+                        {orderDetail.merchant == undefined
+                          ? null
+                          : orderDetail.merchant.name}
                       </Text>
                     </View>
                     <View style={styles.textInner}>
                       <Ionicons name="location" size={16} color="black" />
-                      <Text style={styles.text}>{route.params.location}</Text>
+                      <Text style={styles.text}>{orderDetail.address}</Text>
                     </View>
                     <View style={styles.textInner}>
                       <Feather name="clock" size={16} color="black" />
                       <Text style={styles.text}>
-                        {route.params.date} at {route.params.time}
+                        {orderDetail.date} at {orderDetail.time}
                       </Text>
                     </View>
                     <View style={styles.textInner}>
@@ -128,7 +159,11 @@ function orderConfirmPage({ navigation, route }) {
                         size={18}
                         color="black"
                       />
-                      <Text style={styles.text}>{route.params.package}</Text>
+                      <Text style={styles.text}>
+                        {orderDetail.package == undefined
+                          ? null
+                          : orderDetail.package.name}
+                      </Text>
                     </View>
                     <View style={styles.textInner}>
                       <MaterialIcons
@@ -136,12 +171,34 @@ function orderConfirmPage({ navigation, route }) {
                         size={16}
                         color="black"
                       />
-                      <Text style={styles.text}>RM 99</Text>
+                      <Text style={styles.text}>RM {orderDetail.price}</Text>
                     </View>
                   </View>
                 </View>
               </Card.Content>
             </Card>
+          </View>
+
+          <Text style={styles.pickerText}>Payment Method</Text>
+          <View style={styles.picker}>
+            <Picker
+              style={styles.pickerInner}
+              selectedValue={pm}
+              onValueChange={(itemValue) => setPm(itemValue)}
+            >
+              <Picker.Item label="Select Payment Method" value="" />
+              {paymentMethods.length == 0
+                ? null
+                : paymentMethods.map((paymentMethod, i) => {
+                    return (
+                      <Picker.Item
+                        label={paymentMethod.name}
+                        value={paymentMethod.id}
+                        key={i}
+                      />
+                    );
+                  })}
+            </Picker>
           </View>
 
           <View style={styles.button}>
@@ -231,6 +288,27 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
+  },
+  pickerText: {
+    marginLeft: 35,
+    paddingBottom: 10,
+    fontSize: 14,
+    color: "black",
+    marginTop: 20,
+    alignSelf: "flex-start",
+  },
+  picker: {
+    width: 330,
+    height: 45,
+    borderColor: "#a6a6a6",
+    borderRadius: 5,
+    borderWidth: 1,
+    backgroundColor: "#FFFFFF",
+    marginBottom: 20,
+  },
+  pickerInner: {
+    top: -5,
+    left: 5,
   },
 });
 

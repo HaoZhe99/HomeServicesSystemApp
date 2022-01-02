@@ -130,37 +130,21 @@ function OrderFormPage({ navigation, route }) {
     return data.data;
   };
 
-  const [pm, setPm] = React.useState([]);
-
-  // get payment method
-  const [paymentMethods, setPaymentMethods] = React.useState([]);
-  useEffect(() => {
-    const getPaymentMethods = async () => {
-      const paymentMethodFromServer = await fetchPaymentMethods();
-      setPaymentMethods(paymentMethodFromServer);
-    };
-    getPaymentMethods();
-  }, []);
-
-  const fetchPaymentMethods = async () => {
-    const res = await fetch("http://10.0.2.2:8000/api/v1/payment-methods");
-    const data = await res.json();
-    return data.data;
-  };
-
   const [time, setTime] = useState("");
 
   const data1 = {
     date: d,
-    time: time,
+    time: time.toString() + ":00",
     merchant_id: route.params.merchant_id,
     package_id: p,
+    address: location,
     status: "pending",
     user_id: userId,
   };
 
   const booking = () => {
-    if (date.getHours() + 8 < 10 || date.getHours() + 8 >= 19) {
+    // || date.getHours() + 8 >= 19
+    if (date.getHours() + 8 < 10) {
       Alert.alert("Time Invaild!", "Selected Time not Under Service Time!", [
         {
           text: "Cancel",
@@ -214,7 +198,7 @@ function OrderFormPage({ navigation, route }) {
     }
   };
 
-  console.log(new Date().getHours() + 8 > time ? "false" : "true");
+  // console.log(users.addresses[0].state);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -240,8 +224,20 @@ function OrderFormPage({ navigation, route }) {
                   : users.addresses.map((user, i) => {
                       return (
                         <Picker.Item
-                          label={user.address}
-                          value={user.address}
+                          label={
+                            user.address +
+                            ", " +
+                            user.state.postcode +
+                            ", " +
+                            user.state.area
+                          }
+                          value={
+                            user.address +
+                            ", " +
+                            user.state.postcode +
+                            ", " +
+                            user.state.area
+                          }
                           key={i}
                         />
                       );

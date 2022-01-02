@@ -290,15 +290,35 @@ function OrderViewPage({ navigation }) {
                       <View style={styles.buttonContainer}>
                         <TouchableOpacity
                           style={
-                            order.status == "incomplete"
-                              ? styles.buttonRed
-                              : styles.buttonGreen
+                            order.status != null
+                              ? order.status == "incomplete"
+                                ? styles.buttonRed
+                                : order.status == "completed"
+                                ? styles.buttonGreen
+                                : order.status == "pending"
+                                ? styles.buttonGray
+                                : null
+                              : null
+                          }
+                          onPress={
+                            order.status == "pending" && order.price != null
+                              ? () =>
+                                  navigation.navigate("orderConfirmPage", {
+                                    order_id: order.id,
+                                  })
+                              : null
                           }
                         >
                           <Text style={styles.buttonTitle}>
-                            {order.status == "incomplete"
-                              ? "Incomplete"
-                              : "Completed"}
+                            {order.status != null
+                              ? order.status == "incomplete"
+                                ? "Incomplete"
+                                : order.status == "completed"
+                                ? "Completed"
+                                : order.status == "pending"
+                                ? "Pending"
+                                : null
+                              : null}
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -393,6 +413,14 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 5,
     backgroundColor: "#1fae51",
+  },
+  buttonGray: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 100,
+    height: 30,
+    borderRadius: 5,
+    backgroundColor: "gray",
   },
   buttonTitle: {
     color: "#FFFFFF",
