@@ -40,6 +40,7 @@ function ServicerCompletedOrderPage({ navigation, route }) {
 
   getData().then((T) => {
     T.id != null ? setServicerId(T.id) : setServicerId("");
+    // console.log(T.id);
   });
 
   //get orders
@@ -58,7 +59,7 @@ function ServicerCompletedOrderPage({ navigation, route }) {
       "http://10.0.2.2:8000/api/v1/orders/oldOrder/" + servicerId
     );
     const data = await res.json();
-    console.log(data.data[0]);
+    // console.log(data.data[0]);
     return data.data;
   };
 
@@ -73,7 +74,7 @@ function ServicerCompletedOrderPage({ navigation, route }) {
       >
         {orders == 0 ? (
           <View style={styles.noOrderContainer}>
-            <Text style={styles.noOrder}>Not Order!</Text>
+            <Text style={styles.noOrder}>No Order!</Text>
           </View>
         ) : (
           orders.map((order, i) => {
@@ -82,7 +83,7 @@ function ServicerCompletedOrderPage({ navigation, route }) {
                 <Card
                   style={styles.cardContent}
                   onPress={() =>
-                    navigation.navigate("ServicerOrderDetailPage", {
+                    navigation.navigate("Servicer Order Detail", {
                       order_id: order.id,
                     })
                   }

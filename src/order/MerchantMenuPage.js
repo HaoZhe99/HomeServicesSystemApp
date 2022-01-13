@@ -62,7 +62,7 @@ function MerchantMenuPage({ navigation, route }) {
                       <TouchableOpacity
                         style={styles.cardDetail}
                         onPress={() =>
-                          navigation.navigate("MerchantDetailPage", {
+                          navigation.navigate("Merchant Detail", {
                             merchant_id: merchant.id,
                           })
                         }
@@ -95,7 +95,7 @@ function MerchantMenuPage({ navigation, route }) {
                           <MainButton
                             title="Book"
                             onPress={() =>
-                              navigation.navigate("OrderFormPage", {
+                              navigation.navigate("Order Form", {
                                 merchant_id: merchant.id,
                                 merchant_name: merchant.name,
                               })

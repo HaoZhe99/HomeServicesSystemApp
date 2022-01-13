@@ -73,7 +73,7 @@ function AddPMPage({ navigation, route }) {
           <View style={styles.button}>
             <MainButton
               title="+ Add Card"
-              onPress={() => navigation.navigate("AddPMFormPage")}
+              onPress={() => navigation.navigate("Add Payment Method Form")}
             />
           </View>
           {cards.length == 0
@@ -85,7 +85,7 @@ function AddPMPage({ navigation, route }) {
                       <TouchableOpacity
                         style={styles.row}
                         onPress={() =>
-                          navigation.navigate("UpdatePMFormPage", {
+                          navigation.navigate("Update Payment Method Form", {
                             card: card,
                           })
                         }

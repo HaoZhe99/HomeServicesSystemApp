@@ -14,11 +14,11 @@ function ServicerNewOrderNav() {
       }}
     >
       <NavStack.Screen
-        name="ServicerNewOrderPage"
+        name="Servicer Incomplete Order"
         component={ServicerNewOrderPage}
       />
       <NavStack.Screen
-        name="ServicerOrderDetailPage"
+        name="Servicer Order Detail"
         component={ServicerOrderDetailPage}
       />
       <NavStack.Screen

@@ -39,7 +39,7 @@ function MyAccountPage({ navigation, route }) {
             <Card.Content>
               <TouchableOpacity
                 style={styles.row}
-                onPress={() => navigation.navigate("ProfilePage")}
+                onPress={() => navigation.navigate("Profile Page")}
               >
                 <View style={styles.firstIcon}>
                   <Ionicons name="person" size={30} color="black" />
@@ -57,7 +57,7 @@ function MyAccountPage({ navigation, route }) {
             <Card.Content>
               <TouchableOpacity
                 style={styles.row}
-                onPress={() => navigation.navigate("AddAddressPage")}
+                onPress={() => navigation.navigate("Add Address Page")}
               >
                 <View style={styles.firstIcon}>
                   <Entypo name="location" size={30} color="black" />
@@ -75,7 +75,7 @@ function MyAccountPage({ navigation, route }) {
             <Card.Content>
               <TouchableOpacity
                 style={styles.row}
-                onPress={() => navigation.navigate("AddPMPage")}
+                onPress={() => navigation.navigate("Add Payment Method")}
               >
                 <View style={styles.firstIcon}>
                   <AntDesign name="creditcard" size={30} color="black" />

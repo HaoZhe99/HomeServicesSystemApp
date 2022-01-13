@@ -11,6 +11,8 @@ import AddAddressFormPage from "../UserProfile/AddAddressFormPage";
 import UpdateAddressFormPage from "../UserProfile/UpdateAddressFormPage";
 import AddPMFormPage from "../UserProfile/AddPMFormPage";
 import UpdatePMFormPage from "../UserProfile/UpdatePMFormPage";
+import AddSuccessFulPage from "../UserProfile/AddSuccessFulPage";
+
 
 const NavStack = createNativeStackNavigator();
 
@@ -21,24 +23,29 @@ function ProfileNav() {
         headerTitleAlign: "center",
       }}
     >
-      <NavStack.Screen name="ProfileMenu" component={ProfileMenu} />
-      <NavStack.Screen name="ProfilePage" component={ProfilePage} />
-      <NavStack.Screen name="AddAddressPage" component={AddAddressPage} />
-      <NavStack.Screen name="AddPMPage" component={AddPMPage} />
+      <NavStack.Screen name="Profile Menu" component={ProfileMenu} />
+      <NavStack.Screen name="Profile Page" component={ProfilePage} />
+      <NavStack.Screen name="Add Address Page" component={AddAddressPage} />
+      <NavStack.Screen name="Add Payment Method" component={AddPMPage} />
       <NavStack.Screen name="My Account" component={MyAccountPage} />
       <NavStack.Screen name="Order History" component={OrderViewPage} />
       <NavStack.Screen
-        name="AddAddressFormPage"
+        name="Add Address Form"
         component={AddAddressFormPage}
       />
       <NavStack.Screen
-        name="UpdateAddressFormPage"
+        name="Update Address Form"
         component={UpdateAddressFormPage}
       />
-      <NavStack.Screen name="AddPMFormPage" component={AddPMFormPage} />
-      <NavStack.Screen name="UpdatePMFormPage" component={UpdatePMFormPage} />
+      <NavStack.Screen name="Add Payment Method Form" component={AddPMFormPage} />
+      <NavStack.Screen name="Update Payment Method Form" component={UpdatePMFormPage} />
       <NavStack.Screen
         name="UpadateSuccessFulPage"
+        component={UpadateSuccessFulPage}
+        options={{ headerShown: false }}
+      />
+      <NavStack.Screen
+        name="AddSuccessFulPage"
         component={UpadateSuccessFulPage}
         options={{ headerShown: false }}
       />

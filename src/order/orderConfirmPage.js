@@ -106,14 +106,14 @@ function orderConfirmPage({ navigation, route }) {
             // handle success
             console.log(JSON.stringify(response.data));
           });
-        navigation.navigate("OrderSuccefullyPage", {
+        navigation.navigate("PaymentSuccefullyPage", {
           hearder: "false",
         });
       } catch (error) {
         console.log(error.message);
       }
     } else {
-      navigation.navigate("PaymentPage", { pm: pm, order: orderDetail.id });
+      navigation.navigate("Payment", { pm: pm, order: orderDetail.id });
     }
   };
 

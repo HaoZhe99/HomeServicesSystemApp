@@ -9,7 +9,7 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { StackActions } from "@react-navigation/native";
 
-function UpadateSuccessFulPage({ navigation }) {
+function PaymentSuccefullyPage({ navigation }) {
   const goHonePage = () => {
     navigation.dispatch(StackActions.popToTop());
   };
@@ -21,7 +21,7 @@ function UpadateSuccessFulPage({ navigation }) {
           <AntDesign name="checkcircleo" size={68} color="green" />
         </View>
         <View style={styles.TitleContainer}>
-          <Text style={styles.title}>Update</Text>
+          <Text style={styles.title}>Payment</Text>
           <Text style={styles.title}>Successfully</Text>
         </View>
 
@@ -81,4 +81,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpadateSuccessFulPage;
+export default PaymentSuccefullyPage;

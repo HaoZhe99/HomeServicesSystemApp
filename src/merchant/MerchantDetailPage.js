@@ -155,7 +155,7 @@ function MerchantDetailPage({ navigation, route }) {
               <MainButton
                 title="Book Now"
                 onPress={() =>
-                  navigation.navigate("OrderFormPage", {
+                  navigation.navigate("Order Form", {
                     merchant_id: merchants.id,
                     merchant_name: merchants.name,
                   })

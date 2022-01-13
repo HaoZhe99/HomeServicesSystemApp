@@ -69,7 +69,7 @@ function AddAddressPage({ navigation, route }) {
           <View style={styles.button}>
             <MainButton
               title="+ Add Address"
-              onPress={() => navigation.navigate("AddAddressFormPage")}
+              onPress={() => navigation.navigate("Add Address Form")}
             />
           </View>
           {users.length == 0
@@ -81,7 +81,7 @@ function AddAddressPage({ navigation, route }) {
                       <TouchableOpacity
                         style={styles.row}
                         onPress={() =>
-                          navigation.navigate("UpdateAddressFormPage", {
+                          navigation.navigate("Update Address Form", {
                             address: user,
                           })
                         }

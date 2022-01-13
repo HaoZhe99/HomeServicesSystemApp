@@ -130,7 +130,7 @@ function HomePage({ navigation }) {
                   key={i}
                   style={styles.category}
                   onPress={() =>
-                    navigation.navigate("MerchantMenuPage", {
+                    navigation.navigate("Merchant Menu", {
                       paramKey: category.id,
                     })
                   }
@@ -156,7 +156,7 @@ function HomePage({ navigation }) {
         <TouchableOpacity
           style={styles.companyDetailsContainer}
           onPress={() =>
-            navigation.navigate("MerchantDetailPage", {
+            navigation.navigate("Merchant Detail", {
               merchant_id: categoryRandom.id,
             })
           }

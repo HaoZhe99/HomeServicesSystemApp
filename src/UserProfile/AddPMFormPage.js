@@ -84,7 +84,7 @@ function AddPMFormPage({ navigation, route }) {
           // handle success
           console.log(JSON.stringify(response.data));
         });
-      navigation.navigate("UpadateSuccessFulPage", {
+      navigation.navigate("AddSuccessFulPage", {
         hearder: "false",
       });
     } catch (error) {

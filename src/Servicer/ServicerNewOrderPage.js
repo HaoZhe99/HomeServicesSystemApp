@@ -80,7 +80,7 @@ function ServicerNewOrderPage({ navigation, route }) {
       >
         {orders == 0 ? (
           <View style={styles.noOrderContainer}>
-            <Text style={styles.noOrder}>Not Order!</Text>
+            <Text style={styles.noOrder}>No Order!</Text>
           </View>
         ) : (
           orders.map((order, i) => {
@@ -90,7 +90,7 @@ function ServicerNewOrderPage({ navigation, route }) {
                 <Card
                   style={styles.cardContent}
                   onPress={() =>
-                    navigation.navigate("ServicerOrderDetailPage", {
+                    navigation.navigate("Servicer Order Detail", {
                       order_id: order.id,
                     })
                   }

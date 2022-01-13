@@ -71,7 +71,7 @@ function PaymentPage({ navigation, route }) {
               // handle success
               console.log(JSON.stringify(response.data));
             });
-          navigation.navigate("OrderSuccefullyPage", {
+          navigation.navigate("PaymentSuccefullyPage", {
             hearder: "false",
           });
         } catch (error) {
@@ -92,7 +92,7 @@ function PaymentPage({ navigation, route }) {
               // handle success
               console.log(JSON.stringify(response.data));
             });
-          navigation.navigate("OrderSuccefullyPage", {
+          navigation.navigate("PaymentSuccefullyPage", {
             hearder: "false",
           });
         } catch (error) {

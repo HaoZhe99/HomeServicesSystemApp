@@ -5,6 +5,7 @@ import OrderFormPage from "../order/OrderFormPage";
 import orderConfirmPage from "../order/orderConfirmPage";
 import HomePage from "../HomePage";
 import OrderSuccefullyPage from "../order/OrderSuccefullyPage";
+import PaymentSuccefullyPage from "../order/PaymentSuccefullyPage";
 import MerchantDetailPage from "../merchant/MerchantDetailPage";
 import PaymentPage from "../Payment/PaymentPage";
 import { StyleSheet } from "react-native";
@@ -21,17 +22,22 @@ function NavPage({ navigation }) {
     >
       <NavStack.Screen name="Home" component={HomePage} />
       <NavStack.Screen
-        name="MerchantDetailPage"
+        name="Merchant Detail"
         component={MerchantDetailPage}
       />
-      <NavStack.Screen name="MerchantMenuPage" component={MerchantMenuPage} />
-      <NavStack.Screen name="OrderFormPage" component={OrderFormPage} />
-      <NavStack.Screen name="orderConfirmPage" component={orderConfirmPage} />
-      <NavStack.Screen name="PaymentPage" component={PaymentPage} />
+      <NavStack.Screen name="Merchant Menu" component={MerchantMenuPage} />
+      <NavStack.Screen name="Order Form" component={OrderFormPage} />
+      <NavStack.Screen name="Order Confirm" component={orderConfirmPage} />
+      <NavStack.Screen name="Payment" component={PaymentPage} />
       <NavStack.Screen
         options={{ headerShown: false }}
         name="OrderSuccefullyPage"
         component={OrderSuccefullyPage}
+      />
+      <NavStack.Screen
+        options={{ headerShown: false }}
+        name="PaymentSuccefullyPage"
+        component={PaymentSuccefullyPage}
       />
       <NavStack.Screen
         name="OrderNav"

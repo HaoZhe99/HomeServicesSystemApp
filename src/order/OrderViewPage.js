@@ -233,7 +233,7 @@ function OrderViewPage({ navigation }) {
               </View>
               <View style={styles.textInputContainer}>
                 <TextInput
-                  label="Comment"
+                  label="Comment (Optional)"
                   placeholder="Type Comment ......"
                   mode="outlined"
                   value={comment}
@@ -300,14 +300,6 @@ function OrderViewPage({ navigation }) {
                                 : null
                               : null
                           }
-                          onPress={
-                            order.status == "pending" && order.price != null
-                              ? () =>
-                                  navigation.navigate("orderConfirmPage", {
-                                    order_id: order.id,
-                                  })
-                              : null
-                          }
                         >
                           <Text style={styles.buttonTitle}>
                             {order.status != null
@@ -321,6 +313,18 @@ function OrderViewPage({ navigation }) {
                               : null}
                           </Text>
                         </TouchableOpacity>
+                        {order.status == "pending" && order.price != null ? (
+                          <TouchableOpacity
+                            style={styles.buttonYellow}
+                            onPress={() =>
+                              navigation.navigate("Order Confirm", {
+                                order_id: order.id,
+                              })
+                            }
+                          >
+                            <Text style={styles.buttonTitle}>Payment</Text>
+                          </TouchableOpacity>
+                        ) : null}
                       </View>
                     </View>
                     {order.status == "completed" && order.rate == null ? (
@@ -421,6 +425,14 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 5,
     backgroundColor: "gray",
+  },
+  buttonYellow: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 100,
+    height: 30,
+    borderRadius: 5,
+    backgroundColor: "#009ca7",
   },
   buttonTitle: {
     color: "#FFFFFF",
