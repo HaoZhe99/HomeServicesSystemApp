@@ -43,6 +43,8 @@ function MerchantMenuPage({ navigation, route }) {
     return data.data;
   };
 
+  console.log(route.params.c_name);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -98,6 +100,7 @@ function MerchantMenuPage({ navigation, route }) {
                               navigation.navigate("Order Form", {
                                 merchant_id: merchant.id,
                                 merchant_name: merchant.name,
+                                c_name: route.params.c_name,
                               })
                             }
                           />

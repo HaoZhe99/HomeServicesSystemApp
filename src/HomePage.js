@@ -132,6 +132,7 @@ function HomePage({ navigation }) {
                   onPress={() =>
                     navigation.navigate("Merchant Menu", {
                       paramKey: category.id,
+                      c_name: category.name,
                     })
                   }
                 >

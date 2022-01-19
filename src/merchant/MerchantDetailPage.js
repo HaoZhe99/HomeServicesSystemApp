@@ -125,6 +125,12 @@ function MerchantDetailPage({ navigation, route }) {
                       <Paragraph>{merchants.contact_number}</Paragraph>
                     </View>
                     <View>
+                      <Paragraph style={styles.cardTitlle}>
+                        Delivery Fee
+                      </Paragraph>
+                      <Paragraph>{merchants.delivery_fee}</Paragraph>
+                    </View>
+                    <View>
                       <Paragraph style={styles.cardTitlle}>Address</Paragraph>
                       <Paragraph>
                         {merchants.address},

@@ -198,7 +198,25 @@ function OrderFormPage({ navigation, route }) {
     }
   };
 
-  // console.log(users.addresses[0].state);
+  // category get request
+  const [merchants, setMerchant] = React.useState([]);
+  useEffect(() => {
+    const getMerchant = async () => {
+      const merchantFromServer = await fetchMerchant();
+      setMerchant(merchantFromServer);
+    };
+    getMerchant();
+  }, []);
+
+  const fetchMerchant = async () => {
+    const res = await fetch(
+      "http://10.0.2.2:8000/api/v1/merchants/" + route.params.merchant_id
+    );
+    const data = await res.json();
+    return data.data;
+  };
+
+  console.log(merchants.delivery_fee);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -209,7 +227,8 @@ function OrderFormPage({ navigation, route }) {
         }
       >
         <View style={styles.menuContainer}>
-          <Text style={styles.menuText}>Cleaning Services</Text>
+          <Text style={styles.menuText}>{route.params.c_name}</Text>
+          <Text style={styles.remiderText}>*{merchants.delivery_fee}</Text>
           <View style={styles.formContainer}>
             <Text style={styles.text}>Location</Text>
             <View style={styles.picker}>
@@ -407,6 +426,14 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginBottom: 10,
     fontSize: 20,
+  },
+  remiderText: {
+    alignSelf: "flex-start",
+    paddingLeft: 10,
+    marginLeft: 30,
+    marginBottom: 10,
+    fontSize: 12,
+    color: "red",
   },
   formContainer: {
     textAlign: "center",

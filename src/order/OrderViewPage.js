@@ -123,6 +123,7 @@ function OrderViewPage({ navigation }) {
     ]);
   };
 
+  // console.log(orderDetail);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -143,9 +144,7 @@ function OrderViewPage({ navigation }) {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText} numberOfLines={2}>
-                {orderDetail.merchant == undefined
-                  ? null
-                  : orderDetail.merchant.name}
+                Cleaning Johor
               </Text>
               <View style={styles.RBC}>
                 <RadioButton.Group
